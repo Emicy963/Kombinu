@@ -9,10 +9,10 @@ def register_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Conta Criada com Sucesso.')
-            return redirect('dasboard')
+            return redirect('dashboard')
     else:
         form = CustomUserCreationForm()
-        return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
     
 def login_view(request):
     if request.method=='POST':
@@ -21,7 +21,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('dasboard')
+            return redirect('dashboard')
         else:
             messages.error(request, 'Nome ou senha incorreta')
     else:

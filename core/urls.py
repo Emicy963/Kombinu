@@ -7,5 +7,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', start_view, name='home'),
     path('auth/', include('accounts.urls')),
-    path('dasbord/', home_view, name='dasboard'),
+    path('dashbord/', home_view, name='dashboard'),
 ]
