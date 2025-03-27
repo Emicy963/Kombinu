@@ -1,0 +1,892 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão Escolar</title>
+    <link rel="shortcut icon" href="./LOGO DOMAG.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/dasboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'media/LOGO_DOMAG.jpg' %}" alt="DOMAG Tech Logo">
+        </div>
+        <div class="menu-item" id="dashboard-menu">
+            <i class="fas fa-home"></i>
+            <span>Painel</span>
+        </div>
+        <div class="menu-item" id="students-menu">
+            <i class="fas fa-user-friends"></i>
+            <span>Alunos</span>
+        </div>
+        <div class="menu-item" id="teachers-menu">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>Professores</span>
+        </div>
+        <div class="menu-item" id="reports-menu">
+            <i class="fas fa-file-alt"></i>
+            <span>Boletim Geral</span>
+        </div>
+        <div class="menu-item" id="admin-menu">
+            <i class="fas fa-cog"></i>
+            <span>Gestão Administrativa</span>
+        </div>
+        <div class="menu-item" id="user-menu">
+            <i class="fas fa-user"></i>
+            <span>Usuário</span>
+        </div>
+        <div class="menu-item" id="chat-menu">
+            <i class="fas fa-comments"></i>
+            <span>Bater papo</span>
+        </div>
+        <div class="menu-item" id="activities-menu">
+            <i class="fas fa-chart-line"></i>
+            <span>Crianças de atividade</span>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <div class="page-title" id="current-page-title">Painel</div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Pesquise aqui...">
+            </div>
+            <div class="user-actions">
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="settings">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <div class="user-name">A.André</div>
+                        <div class="user-role">Admin</div>
+                    </div>
+                    <img src="./GÊ.jpg" alt="User Profile">
+                </div>
+            </div>
+        </div>
+        
+        <div id="dashboard-page">
+            <div class="dashboard-stats">
+                <div class="stat-item">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number">2932</div>
+                        <div class="stat-label">Alunos ativos</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number">124</div>
+                        <div class="stat-label">Professores</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon yellow">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number">40</div>
+                        <div class="stat-label">Eventos</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon yellow">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number">+3mil</div>
+                        <div class="stat-label">Boletins</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="performance-chart">
+                <div class="chart-header">
+                    <div class="chart-title">Desempenho escolar</div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color orange"></div>
+                            <div>Essa semana</div>
+                            <div class="legend-value">1.245</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color yellow"></div>
+                            <div>Semana passada</div>
+                            <div class="legend-value">1.356</div>
+                        </div>
+                    </div>
+                </div>
+                <canvas id="performance-canvas" class="chart-canvas"></canvas>
+            </div>
+        </div>
+        
+        <div id="students-page" class="hidden">
+            <div class="list-header">
+                <div class="list-actions">
+                    <div class="dropdown">Mais novo</div>
+                    <button class="add-button" id="add-student-btn">
+                        <i class="fas fa-plus"></i>
+                        Novo aluno
+                    </button>
+                </div>
+            </div>
+            
+            <div class="student-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="select-all">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </th>
+                            <th>Nome</th>
+                            <th>Data</th>
+                            <th>Nome do pai</th>
+                            <th>Cidade</th>
+                            <th>Contato</th>
+                            <th>Nota</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <div class="student-name">
+                                    <div class="student-avatar">A</div>
+                                    Antonio
+                                </div>
+                            </td>
+                            <td>4 de março de 2003</td>
+                            <td>Isabel dos Santos</td>
+                            <td>Soyo</td>
+                            <td>
+                                <i class="fas fa-phone contact-icon"></i>
+                                <i class="fas fa-envelope contact-icon"></i>
+                            </td>
+                            <td><span class="status-badge orange">8.5</span></td>
+                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="checkbox-container">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <div class="student-name">
+                                    <div class="student-avatar">J</div>
+                                    Gibson
+                                </div>
+                            </td>
+                            <td>2 de setembro de 2004</td>
+                            <td>Mateus Pedro</td>
+                            <td>Luanda</td>
+                            <td>
+                                <i class="fas fa-phone contact-icon"></i>
+                                <i class="fas fa-envelope contact-icon"></i>
+                            </td>
+                            <td><span class="status-badge yellow">7.8</span></td>
+                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <div class="student-name">
+                                    <div class="student-avatar">O</div>
+                                    Orlando
+                                </div>
+                            </td>
+                            <td>24 de agosto de 2003</td>
+                            <td>Adão de Almeida</td>
+                            <td>K.Sul</td>
+                            <td>
+                                <i class="fas fa-phone contact-icon"></i>
+                                <i class="fas fa-envelope contact-icon"></i>
+                            </td>
+                            <td><span class="status-badge purple">9.1</span></td>
+                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="checkbox-container">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <div class="student-name">
+                                    <div class="student-avatar">D</div>
+                                    Domingos
+                                </div>
+                            </td>
+                            <td>30 de junho de 2005</td>
+                            <td>Armando Vinagre</td>
+                            <td>Lubango</td>
+                            <td>
+                                <i class="fas fa-phone contact-icon"></i>
+                                <i class="fas fa-envelope contact-icon"></i>
+                            </td>
+                            <td><span class="status-badge yellow">7.5</span></td>
+                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <div class="student-name">
+                                    <div class="student-avatar">N</div>
+                                    Constantino
+                                </div>
+                            </td>
+                            <td>25 de dezembro de 2005</td>
+                            <td>Jack Songo</td>
+                            <td>Huambo</td>
+                            <td>
+                                <i class="fas fa-phone contact-icon"></i>
+                                <i class="fas fa-envelope contact-icon"></i>
+                            </td>
+                            <td><span class="status-badge orange">8.2</span></td>
+                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="checkbox-container">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <div class="student-name">
+                                    <div class="student-avatar">P</div>
+                                    Anderson
+                                </div>
+                            </td>
+                            <td>1 de janeiro de 2004</td>
+                            <td>Helder Conduto</td>
+                            <td>Luanda</td>
+                            <td>
+                                <i class="fas fa-phone contact-icon"></i>
+                                <i class="fas fa-envelope contact-icon"></i>
+                            </td>
+                            <td><span class="status-badge yellow">7.9</span></td>
+                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="pagination">
+                    <div class="page-number active">1</div>
+                    <div class="page-number">2</div>
+                    <div class="page-number">3</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="add-student-page" class="hidden">
+            <div class="new-student-form">
+                <div class="form-section">
+                    <div class="section-title">Detalhes do aluno</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Foto *</label>
+                            <div class="form-photo">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div style="font-size: 12px; color: #666; margin-top: 5px;">Arraste uma imagem ou clique para enviar</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Primeiro nome *</label>
+                            <input type="text" class="form-input" placeholder="Antonio">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sobrenome *</label>
+                            <input type="text" class="form-input" placeholder="André">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data *</label>
+                            <input type="text" class="form-input" placeholder="16 de Fevereiro de 2004">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gênero *</label>
+                            <input type="text" class="form-input" placeholder="Masculino">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nome do pai *</label>
+                            <input type="text" class="form-input" placeholder="Nome do pai">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">E-mail *</label>
+                            <input type="email" class="form-input" placeholder="exemplo@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone *</label>
+                            <input type="tel" class="form-input" placeholder="+244 900 **********">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label class="form-label">Endereço *</label>
+                            <textarea class="form-textarea" placeholder="Coloque seus dados"></textarea>
+                            <div style="font-size: 12px; color: #666; text-align: right; margin-top: 5px;">0/1000</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">Detalhes dos pais</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Primeiro nome *</label>
+                            <input type="text" class="form-input" placeholder="Pedro">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sobrenome *</label>
+                            <input type="text" class="form-input" placeholder="William">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">E-mail *</label>
+                            <input type="email" class="form-input" placeholder="exemplo@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone *</label>
+                            <input type="tel" class="form-input" placeholder="+244 900 **********">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label class="form-label">Endereço *</label>
+                            <textarea class="form-textarea" placeholder="Coloque seus dados"></textarea>
+                            <div style="font-size: 12px; color: #666; text-align: right; margin-top: 5px;">0/1000</div>
+                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <div class="section-title">Detalhes acadêmicos</div>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label class="form-label">Número de matrícula *</label>
+                                            <input type="text" class="form-input" placeholder="CMAG2023001">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Classe *</label>
+                                            <input type="text" class="form-input" placeholder="10ª">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Turma *</label>
+                                            <input type="text" class="form-input" placeholder="A">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Ano lectivo *</label>
+                                            <input type="text" class="form-input" placeholder="2023-2024">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button class="btn-draft">Salvar como rascunho</button>
+                                    <button class="btn-save">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="teachers-page" class="hidden">
+                            <div class="list-header">
+                                <div class="list-actions">
+                                    <div class="dropdown">Mais novo</div>
+                                    <button class="add-button">
+                                        <i class="fas fa-plus"></i>
+                                        Novo professor
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="student-list">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label class="checkbox-container">
+                                                    <input type="checkbox" id="select-all-teachers">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </th>
+                                            <th>Nome</th>
+                                            <th>Disciplina</th>
+                                            <th>Experiência</th>
+                                            <th>Cidade</th>
+                                            <th>Contato</th>
+                                            <th>Status</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <label class="checkbox-container">
+                                                    <input type="checkbox" checked>
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <div class="student-name">
+                                                    <div class="student-avatar">C</div>
+                                                    Carlos
+                                                </div>
+                                            </td>
+                                            <td>Matemática</td>
+                                            <td>10 anos</td>
+                                            <td>Luanda</td>
+                                            <td>
+                                                <i class="fas fa-phone contact-icon"></i>
+                                                <i class="fas fa-envelope contact-icon"></i>
+                                            </td>
+                                            <td><span class="status-badge purple">Ativo</span></td>
+                                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label class="checkbox-container">
+                                                    <input type="checkbox">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <div class="student-name">
+                                                    <div class="student-avatar">M</div>
+                                                    Marta
+                                                </div>
+                                            </td>
+                                            <td>Biologia</td>
+                                            <td>8 anos</td>
+                                            <td>Luanda</td>
+                                            <td>
+                                                <i class="fas fa-phone contact-icon"></i>
+                                                <i class="fas fa-envelope contact-icon"></i>
+                                            </td>
+                                            <td><span class="status-badge orange">Ativo</span></td>
+                                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label class="checkbox-container">
+                                                    <input type="checkbox">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <div class="student-name">
+                                                    <div class="student-avatar">F</div>
+                                                    Fernando
+                                                </div>
+                                            </td>
+                                            <td>Física</td>
+                                            <td>5 anos</td>
+                                            <td>Luanda</td>
+                                            <td>
+                                                <i class="fas fa-phone contact-icon"></i>
+                                                <i class="fas fa-envelope contact-icon"></i>
+                                            </td>
+                                            <td><span class="status-badge yellow">Ativo</span></td>
+                                            <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                                <div class="pagination">
+                                    <div class="page-number active">1</div>
+                                    <div class="page-number">2</div>
+                                    <div class="page-number">3</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Reports Page -->
+                        <div id="reports-page" class="hidden">
+                            <div class="activity-report">
+                                <div class="activity-header">
+                                    <div class="chart-title">Boletim Geral</div>
+                                    <div class="dropdown">Este mês</div>
+                                </div>
+                                
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Classe</label>
+                                        <select class="form-input">
+                                            <option>Todas</option>
+                                            <option>10ª</option>
+                                            <option>11ª</option>
+                                            <option>12ª</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Turma</label>
+                                        <select class="form-input">
+                                            <option>Todas</option>
+                                            <option>A</option>
+                                            <option>B</option>
+                                            <option>C</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Período</label>
+                                        <select class="form-input">
+                                            <option>1º Trimestre</option>
+                                            <option>2º Trimestre</option>
+                                            <option>3º Trimestre</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Ano Lectivo</label>
+                                        <select class="form-input">
+                                            <option>2023-2024</option>
+                                            <option>2022-2023</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn-save" style="margin-top: 20px;">
+                                    <i class="fas fa-download"></i> Baixar relatório
+                                </button>
+                            </div>
+                        </div>
+                
+                        <div id="admin-page" class="hidden">
+                            <div class="activity-report">
+                                <div class="activity-header">
+                                    <div class="chart-title">Gestão Administrativa</div>
+                                </div>
+                                
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Departamento</label>
+                                        <select class="form-input">
+                                            <option>Todos</option>
+                                            <option>Finanças</option>
+                                            <option>Recursos Humanos</option>
+                                            <option>Informática</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Funcionários</label>
+                                        <select class="form-input">
+                                            <option>Todos</option>
+                                            <option>Activos</option>
+                                            <option>Inativos</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="student-list" style="margin-top: 20px;">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>Cargo</th>
+                                                <th>Departamento</th>
+                                                <th>Data de Admissão</th>
+                                                <th>Status</th>
+                                                <th>Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="student-name">
+                                                        <div class="student-avatar">L</div>
+                                                        Luís Carlos
+                                                    </div>
+                                                </td>
+                                                <td>Diretor Financeiro</td>
+                                                <td>Finanças</td>
+                                                <td>01/03/2020</td>
+                                                <td><span class="status-badge purple">Ativo</span></td>
+                                                <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="student-name">
+                                                        <div class="student-avatar">S</div>
+                                                        Sofia Marques
+                                                    </div>
+                                                </td>
+                                                <td>Coordenadora RH</td>
+                                                <td>Recursos Humanos</td>
+                                                <td>15/05/2021</td>
+                                                <td><span class="status-badge orange">Ativo</span></td>
+                                                <td><i class="fas fa-ellipsis-v actions-icon"></i></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="user-profile-page" class="hidden">
+                            <div class="new-student-form">
+                                <div class="form-section">
+                                    <div class="section-title">Perfil do Usuário</div>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label class="form-label">Foto</label>
+                                            <div class="form-photo">
+                                                <i class="fas fa-camera"></i>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Nome</label>
+                                            <input type="text" class="form-input" value="A.André">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-input" value="admin@cmagtech.com">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Cargo</label>
+                                            <input type="text" class="form-input" value="Administrador" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Senha atual</label>
+                                            <input type="password" class="form-input">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Nova senha</label>
+                                            <input type="password" class="form-input">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Confirmar nova senha</label>
+                                            <input type="password" class="form-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button class="btn-save">Atualizar perfil</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="chat-page" class="hidden">
+                            <div class="activity-report">
+                                <div class="activity-header">
+                                    <div class="chart-title">Bater papo</div>
+                                </div>
+                                
+                                <div style="display: flex; height: 400px; border: 1px solid #eee; margin-top: 20px;">
+                                    <div style="width: 30%; border-right: 1px solid #eee; padding: 15px; overflow-y: auto;">
+                                        <div style="margin-bottom: 15px;">
+                                            <input type="text" class="form-input" placeholder="Pesquisar contatos...">
+                                        </div>
+                                        
+                                        <div style="padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center;">
+                                            <div class="student-avatar">M</div>
+                                            <div style="margin-left: 10px;">
+                                                <div style="font-weight: bold;">Maria Silva</div>
+                                                <div style="font-size: 12px; color: #666;">Online</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center; background-color: #f9f9f9;">
+                                            <div class="student-avatar">P</div>
+                                            <div style="margin-left: 10px;">
+                                                <div style="font-weight: bold;">Paulo Mendes</div>
+                                                <div style="font-size: 12px; color: #666;">Último acesso: 10min</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center;">
+                                            <div class="student-avatar">J</div>
+                                            <div style="margin-left: 10px;">
+                                                <div style="font-weight: bold;">José Carlos</div>
+                                                <div style="font-size: 12px; color: #666;">Offline</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="flex: 1; display: flex; flex-direction: column;">
+                                        <div style="padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+                                            <div class="student-avatar">P</div>
+                                            <div style="margin-left: 10px; font-weight: bold;">Paulo Mendes</div>
+                                        </div>
+                                        
+                                        <div style="flex: 1; padding: 15px; overflow-y: auto;">
+                                            <div style="margin-bottom: 15px;">
+                                                <div style="background-color: #f0f0f0; padding: 10px; border-radius: 10px; display: inline-block; max-width: 70%;">
+                                                    Bom dia professor, tudo bem?
+                                                </div>
+                                                <div style="font-size: 12px; color: #666; margin-top: 5px;">09:30</div>
+                                            </div>
+                                            
+                                            <div style="margin-bottom: 15px; text-align: right;">
+                                                <div style="background-color: #4b30e0; color: white; padding: 10px; border-radius: 10px; display: inline-block; max-width: 70%;">
+                                                    Bom dia Paulo, tudo bem e contigo?
+                                                </div>
+                                                <div style="font-size: 12px; color: #666; margin-top: 5px;">09:32</div>
+                                            </div>
+                                            
+                                            <div style="margin-bottom: 15px;">
+                                                <div style="background-color: #f0f0f0; padding: 10px; border-radius: 10px; display: inline-block; max-width: 70%;">
+                                                    Estou bem! Gostaria de saber quando será a próxima aula de reforço?
+                                                </div>
+                                                <div style="font-size: 12px; color: #666; margin-top: 5px;">09:35</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="padding: 15px; border-top: 1px solid #eee; display: flex;">
+                                            <input type="text" class="form-input" placeholder="Digite sua mensagem..." style="flex: 1; margin-right: 10px;">
+                                            <button class="btn-save">Enviar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="activities-page" class="hidden">
+                            <div class="activity-report">
+                                <div class="activity-header">
+                                    <div class="chart-title">Cronograma de atividades</div>
+                                    <div class="dropdown">Este mês</div>
+                                </div>
+                                
+                                <ul class="activity-list">
+                                    <li class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-calendar-check"></i>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="activity-title">Feira de ciências</div>
+                                            <div class="activity-description">Apresentação dos projetos de ciências dos alunos da 10ª classe</div>
+                                        </div>
+                                        <div class="activity-meta">
+                                            <div>23 de Março</div>
+                                            <div>14:00 - 17:00</div>
+                                        </div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="activity-title">Reunião de pais</div>
+                                            <div class="activity-description">Reunião com os pais dos alunos da 11ª classe</div>
+                                        </div>
+                                        <div class="activity-meta">
+                                            <div>25 de Março</div>
+                                            <div>18:00 - 20:00</div>
+                                        </div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-graduation-cap"></i>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="activity-title">Exames finais</div>
+                                            <div class="activity-description">Início dos exames finais do 1º trimestre</div>
+                                        </div>
+                                        <div class="activity-meta">
+                                            <div>15 de Abril</div>
+                                            <div>08:00 - 12:00</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                
+                                <button class="add-button" style="margin-top: 20px;">
+                                    <i class="fas fa-plus"></i>
+                                    Nova atividade
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <script>
+                        const menuItems = document.querySelectorAll('.menu-item');
+                        const pages = document.querySelectorAll('.main-content > div[id$="-page"]');
+                        const pageTitleElement = document.getElementById('current-page-title');
+                        
+                        function setActivePage(pageId) {
+                            pages.forEach(page => {
+                                page.classList.add('hidden');
+                            });
+                            
+                            const selectedPage = document.getElementById(pageId);
+                            if (selectedPage) {
+                                selectedPage.classList.remove('hidden');
+                            }
+                            
+                            menuItems.forEach(item => {
+                                item.classList.remove('active');
+                                if (item.id === pageId.replace('-page', '-menu')) {
+                                    item.classList.add('active');
+                                }
+                            });
+                            
+                            const pageTitle = pageId.replace('-page', '').replace(/-/g, ' ');
+                            pageTitleElement.textContent = pageTitle.charAt(0).toUpperCase() + pageTitle.slice(1);
+                        }
+                        
+                        setActivePage('dashboard-page');
+                        
+                        menuItems.forEach(item => {
+                            item.addEventListener('click', function() {
+                                const pageId = this.id.replace('-menu', '-page');
+                                setActivePage(pageId);
+                            });
+                        });
+                        
+                        document.getElementById('add-student-btn').addEventListener('click', function() {
+                            setActivePage('add-student-page');
+                        });
+                        
+                        const canvas = document.getElementById('performance-canvas');
+                        if (canvas && canvas.getContext) {
+                            const ctx = canvas.getContext('2d');
+                            ctx.beginPath();
+                            ctx.moveTo(0, 200);
+                            ctx.lineTo(100, 100);
+                            ctx.lineTo(200, 150);
+                            ctx.lineTo(300, 80);
+                            ctx.lineTo(400, 120);
+                            ctx.strokeStyle = '#ff6b6b';
+                            ctx.lineWidth = 3;
+                            ctx.stroke();
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(0, 220);
+                            ctx.lineTo(100, 120);
+                            ctx.lineTo(200, 170);
+                            ctx.lineTo(300, 100);
+                            ctx.lineTo(400, 140);
+                            ctx.strokeStyle = '#ffaa00';
+                            ctx.lineWidth = 3;
+                            ctx.stroke();
+                        }
+                    </script>
+    </body>
+</html>
+                
