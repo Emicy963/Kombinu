@@ -24,8 +24,7 @@ def login_view(request):
             return redirect('dashboard')
         else:
             messages.error(request, 'Nome ou senha incorreta')
-    else:
-        return render(request, 'login.html')
+    return render(request, 'login.html')
     
 def logout_view(request):
     logout(request)

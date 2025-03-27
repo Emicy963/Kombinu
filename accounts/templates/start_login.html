@@ -30,8 +30,8 @@
         </div>
 
         <div class="btn-group">
-            <button class="btn btn-outline" onclick="goToCreateAccount()">Criar conta</button>
-            <button class="btn btn-primary" onclick="login()">Entrar<i class="fas fa-arrow-right"></i></button>
+            <button class="btn btn-outline"><a href="{% url 'register'}">Criar conta</a></button>
+            <button class="btn btn-primary" onclick="login()"><a href="{% url 'login'}">Entrar</a><i class="fas fa-arrow-right"></i></button>
         </div>
 
         <div class="side-decoration side-decoration-left"></div>
@@ -41,10 +41,6 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        function goToCreateAccount() {
-            window.location.href = 'register.html';
-        }
-
         function showToast(message, type = 'success') {
             const toastContainer = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -86,8 +82,6 @@
                 showToast('Você precisa aceitar os termos e condições para continuar.', 'error');
                 return;
             }
-            
-            window.location.href = 'auth/login';
         }
 
     </script>

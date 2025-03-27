@@ -23,7 +23,7 @@
                 {{ form.as_p }}
                 <button type="submit" class="btn btn-primary">Cadastrar</button>
             </form>
-            <p>Já tem conta? <a href="{% url 'home' %}">Faça login</a></p>
+            <p>Já tem conta? <a href="{% url 'login' %}">Faça login</a></p>
         </div>
 
         <div class="side-decoration side-decoration-left"></div>
@@ -33,10 +33,6 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        function goToCreateAccount() {
-            window.location.href = 'criar-conta.html';
-        }
-
         function showToast(message, type = 'success') {
             const toastContainer = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -70,18 +66,6 @@
                 spinner.remove();
             }
         }
-
-        async function login() {
-            const termsAccepted = document.getElementById('termsCheckbox').classList.contains('checked');
-            
-            if (!termsAccepted) {
-                showToast('Você precisa aceitar os termos e condições para continuar.', 'error');
-                return;
-            }
-            
-            window.location.href = 'login.html';
-        }
-
     </script>
 </body>
 </html>
