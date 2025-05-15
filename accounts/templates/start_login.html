@@ -1,89 +1,140 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOMAG TECH - Sistema de Gestão Educacional</title>
-    <link rel="shortcut icon" href="./LOGO DOMAG.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{%  static 'css/login.css' %}">
+  <meta charset="UTF-8">
+  <title>KOMBINU</title>
+  <link rel="shortcut icon" href="./media/1-removebg-preview - Cópia.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #294B6C;
+      font-family: 'Lato', Arial, sans-serif;
+    }
+
+    .login-container {
+      width: 400px;
+      margin: 80px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0px 4px 9px #171a1f1C, 0px 0px 2px #171a1f1F;
+      padding: 48px 40px 40px 40px;
+      position: relative;
+    }
+
+    .login-title {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #294B6C;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .login-subtitle {
+      font-size: 18px;
+      color: #323743;
+      text-align: center;
+      margin-bottom: 32px;
+      font-family: 'Lato', Arial, sans-serif;
+    }
+
+    .login-form label {
+      display: block;
+      font-size: 16px;
+      font-family: 'Lato', Arial, sans-serif;
+      color: #294B6C;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .login-form input[type="email"],
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      border: 1px solid #BDC1CA;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: 'Lato', Arial, sans-serif;
+      background: #F8F9FA;
+      color: #171A1F;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .login-form input[type="email"]:focus,
+    .login-form input[type="text"]:focus,
+    .login-form input[type="password"]:focus {
+      border-color: #294B6C;
+      outline: none;
+    }
+
+    .login-form .required {
+      color: #FFD93D;
+      margin-left: 2px;
+    }
+
+    .login-form .button {
+      width: 100%;
+      height: 48px;
+      background: #294B6C;
+      color: #FFD93D;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0px 4px 9px #171a1f1C, 0px 0px 2px #171a1f1F;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 12px;
+    }
+
+    .login-form .button:hover {
+      background: #223E5A;
+      color: #FFD93D;
+    }
+
+    .login-form .button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .login-form .footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #294B6C;
+    }
+
+    @media (max-width: 500px) {
+      .login-container {
+        width: 98vw;
+        padding: 24px 4vw 24px 4vw;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <img src="{% static 'media/LOGO_DOMAG.png' %}" alt="DOMAG Tech Logo">
-        </div>
+  <div class="login-container">
+    <div class="login-title">Mantenha-se Conectado</div>
+    <div class="login-subtitle">Acesse sua conta para continuar</div>
+    <form class="login-form" action="https://gmail.us16.list-manage.com/subscribe/post?u=7333502bc95cd21ae1d119e5a&amp;id=bbb0d8a657&amp;f_id=00cec2e1f0" method="post" target="_blank">
+      <label for="email">E-mail <span class="required">*</span></label>
+      <input type="email" id="email" name="EMAIL" required>
 
-        <h1>TENHA A MELHOR EXPERIÊNCIA ONLINE</h1>
+      <label for="password">Senha <span class="required">*</span></label>
+      <input type="password" id="password" name="PASSWORD" required>
 
-        <div class="indicator-dots">
-            <div class="dot active"></div>
-            <div class="dot secondary"></div>
-            <div class="dot active"></div>
-            <div class="dot secondary"></div>
-        </div>
-
-        <div class="checkbox-container">
-            <div class="checkbox checked" id="termsCheckbox"></div>
-            <label class="checkbox-label">Aceita os termos & condições.</label>
-        </div>
-
-        <div class="btn-group">
-            <button class="btn btn-outline"><a href="{% url 'register' %}">Criar conta</a></button>
-            <button class="btn btn-primary" onclick="login()"><a href="{% url 'login' %}">Entrar</a><i class="fas fa-arrow-right"></i></button>
-        </div>
-
-        <div class="side-decoration side-decoration-left"></div>
-        <div class="side-decoration side-decoration-right"></div>
-    </div>
-
-    <div class="toast-container" id="toastContainer"></div>
-
-    <script>
-        function showToast(message, type = 'success') {
-            const toastContainer = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <span>${message}</span>
-                <span class="toast-close"><i class="fas fa-times"></i></span>
-            `;
-            
-            toastContainer.appendChild(toast);
-            
-            toast.querySelector('.toast-close').addEventListener('click', function() {
-                toast.remove();
-            });
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 5000);
-        }
-
-        function showSpinner() {
-            const spinner = document.createElement('div');
-            spinner.className = 'spinner-overlay';
-            spinner.innerHTML = '<div class="spinner"></div>';
-            document.body.appendChild(spinner);
-        }
-
-        function hideSpinner() {
-            const spinner = document.querySelector('.spinner-overlay');
-            if (spinner) {
-                spinner.remove();
-            }
-        }
-
-        async function login() {
-            const termsAccepted = document.getElementById('termsCheckbox').classList.contains('checked');
-            
-            if (!termsAccepted) {
-                showToast('Você precisa aceitar os termos e condições para continuar.', 'error');
-                return;
-            }
-        }
-
-    </script>
+      <button type="submit"  class="button">Entrar</button>
+      <div class="footer">
+        Esqueceu de Algo? <a href="#" style="color: #294B6C; text-decoration: underline;">Recuperar</a>
+      </div>
+    </form>
+  </div>
 </body>
 </html>

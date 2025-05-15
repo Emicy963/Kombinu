@@ -29,9 +29,9 @@ Antes de iniciar, certifique-se de ter instalado:
 2. Crie e ative um ambiente virtual:
 
    ```sh
-   python -m venv venv
-   source venv/bin/activate  # Linux/macOS
-   venv\Scripts\activate  # Windows
+   python -m venv .venv
+   source .venv/bin/activate  # Linux/macOS
+   .venv\Scripts\activate  # Windows
    ```
 
 3. Instale as dependências:
@@ -64,7 +64,7 @@ Antes de iniciar, certifique-se de ter instalado:
 
 ## Estrutura do Projeto
 
-```
+```bash
 Kombinu/
 │── accounts/
 │   ├── migrations/
