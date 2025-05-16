@@ -3,7 +3,7 @@ from .form import CustomUserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 
-def register_view(request):
+"""def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -28,7 +28,7 @@ def login_view(request):
     
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('home')"""
 
 def start_view(request):
     return render(request, 'start_login.html')
