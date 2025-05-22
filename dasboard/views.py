@@ -29,5 +29,8 @@ def dashboard_overview(request):
     
     return render(request, 'overview.html', context)
 
+def termos_condicoes(request):
+    return render(request, 'termos_e_condicoes.html')
+
 def home_view(request):
     return render(request, 'dashboard.html')

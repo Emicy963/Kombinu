@@ -12,6 +12,96 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Cookie Banner Styles -->
+  <style>
+    #cookie-banner {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      background: #fff;
+      border-top: 3px solid #294B6C;
+      box-shadow: 0 -2px 16px #171a1f22;
+      z-index: 9999;
+      padding: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      animation: slide-up 0.4s;
+    }
+    @keyframes slide-up {
+      from {transform: translateY(100%);}
+      to {transform: translateY(0);}
+    }
+    .cookie-content {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      padding: 24px 16px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .cookie-text {
+      font-size: 16px;
+      color: #294B6C;
+      flex: 1 1 350px;
+      margin-bottom: 8px;
+    }
+    .cookie-buttons {
+      display: flex;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+    .cookie-buttons button {
+      font-family: 'Poppins', Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #cookie-accept { background: #294B6C; color: #FFD93D; }
+    #cookie-accept:hover { background: #223E5A; }
+    #cookie-reject { background: #FFD93D; color: #294B6C; }
+    #cookie-reject:hover { background: #FFE066; }
+    #cookie-customize { background: #F8F9FA; color: #294B6C; border: 1px solid #294B6C;}
+    #cookie-customize:hover { background: #E0E4EA; }
+
+    .cookie-modal {
+      display: none;
+      position: fixed;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(41, 75, 108, 0.25);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+    }
+    .cookie-modal-content {
+      background: #fff;
+      padding: 32px 24px;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px #171a1f22;
+      max-width: 350px;
+      margin: auto;
+    }
+    .cookie-modal-content h3 {
+      color: #294B6C;
+      margin-top: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+    .cookie-modal-content label {
+      font-size: 16px;
+      color: #323743;
+      margin-bottom: 12px;
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .cookie-content { flex-direction: column; align-items: flex-start; }
+      .cookie-buttons { width: 100%; gap: 8px; margin-top: 10px; }
+    }
+  </style>
 </head>
 <body>
   <header class="header">
@@ -518,7 +608,116 @@
     </div>
   </section>
 
+  <!-- Banner de Cookies -->
+  <div id="cookie-banner" style="display:none;">
+    <div class="cookie-content">
+      <div class="cookie-text">
+        <strong>Este site utiliza cookies</strong><br>
+        Utilizamos cookies para melhorar sua experiência, personalizar conteúdo e analisar nosso tráfego. 
+        <a href="#" id="cookie-more" style="color:#294B6C;text-decoration:underline;">Saiba mais</a>
+      </div>
+      <div class="cookie-buttons">
+        <button id="cookie-accept">Aceitar</button>
+        <button id="cookie-reject">Rejeitar</button>
+        <button id="cookie-customize">Personalizar</button>
+      </div>
+    </div>
+    <!-- Modal de Personalização -->
+    <div id="cookie-modal" class="cookie-modal">
+      <div class="cookie-modal-content">
+        <h3>Preferências de Cookies</h3>
+        <form id="cookie-preferences">
+          <label>
+            <input type="checkbox" checked disabled>
+            <strong>Necessários</strong> (sempre ativos)
+          </label><br>
+          <label>
+            <input type="checkbox" id="cookie-analytics">
+            Cookies de análise
+          </label><br>
+          <label>
+            <input type="checkbox" id="cookie-marketing">
+            Cookies de marketing
+          </label><br><br>
+          <button type="button" id="cookie-save" style="background:#294B6C;color:#FFD93D;">Salvar Preferências</button>
+          <button type="button" id="cookie-cancel" style="margin-left:10px;">Cancelar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script src="static/js/main.js"></script>
   <script src="static/js/animations.js"></script>
+  
+  <!-- Cookie Banner JavaScript -->
+  <script>
+    function setCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+    
+    function getCookie(name) {
+      let nameEQ = name + "=";
+      let ca = document.cookie.split(';');
+      for(let i=0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+      }
+      return null;
+    }
+    
+    function hideBanner() {
+      document.getElementById('cookie-banner').style.display = 'none';
+    }
+    
+    window.addEventListener('DOMContentLoaded', function() {
+      if (!getCookie('cookieConsent')) {
+        document.getElementById('cookie-banner').style.display = 'block';
+      }
+      
+      // Botões principais
+      document.getElementById('cookie-accept').onclick = function() {
+        setCookie('cookieConsent', 'all', 365);
+        hideBanner();
+      };
+      
+      document.getElementById('cookie-reject').onclick = function() {
+        setCookie('cookieConsent', 'necessary', 365);
+        hideBanner();
+      };
+      
+      document.getElementById('cookie-customize').onclick = function() {
+        document.getElementById('cookie-modal').style.display = 'flex';
+      };
+      
+      // Modal
+      document.getElementById('cookie-save').onclick = function() {
+        let analytics = document.getElementById('cookie-analytics').checked;
+        let marketing = document.getElementById('cookie-marketing').checked;
+        let consent = ['necessary'];
+        if (analytics) consent.push('analytics');
+        if (marketing) consent.push('marketing');
+        setCookie('cookieConsent', consent.join(','), 365);
+        document.getElementById('cookie-modal').style.display = 'none';
+        hideBanner();
+      };
+      
+      document.getElementById('cookie-cancel').onclick = function() {
+        document.getElementById('cookie-modal').style.display = 'none';
+      };
+      
+      // Saiba mais (exemplo)
+      document.getElementById('cookie-more').onclick = function(e) {
+        e.preventDefault();
+        alert('Você pode ler nossa política de privacidade para mais detalhes.');
+      };
+    });
+  </script>
 </body>
 </html>
