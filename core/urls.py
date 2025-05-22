@@ -6,7 +6,7 @@ from dasboard.views import home_view, dashboard_overview
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
-    path('dasboard/', dashboard_overview, name='overview'),
+    path('dashboard/', dashboard_overview, name='overview'),
     path('login/', start_view, name='login'),
     #path('accounts/', include('accounts.urls')),
     #path('dashboard/', home_view, name='dashboard'),

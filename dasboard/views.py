@@ -27,7 +27,7 @@ def dashboard_overview(request):
         'dias_semana': ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
     }
     
-    return render(request, 'dashboard/overview.html', context)
+    return render(request, 'overview.html', context)
 
 def home_view(request):
     return render(request, 'dashboard.html')
