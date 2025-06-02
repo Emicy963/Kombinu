@@ -11,4 +11,7 @@ urlpatterns = [
     path('login/', start_view, name='login'),
     #path('accounts/', include('accounts.urls')),
     #path('dashboard/', home_view, name='dashboard'),
+
+    # API urls
+    path('api/', include('accounts.urls_api')),
 ]
