@@ -15,8 +15,8 @@ urlpatterns = [
     #path('dashboard/', home_view, name='dashboard'),
 
     # API urls
-    path('api/', include('accounts.urls_api')),
-    path('api/', include('courses.urls')),
+    path('api/auth/', include('accounts.urls_api')),
+    path('api/courses/', include('courses.urls')),
 ]
 
 if settings.DEBUG:
