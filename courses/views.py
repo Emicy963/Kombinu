@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter, OpenApiTypes
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -7,6 +8,28 @@ from .models import Category, Course, Lesson, Enrollment, LessonProgress
 from .serializers import (
     CategorySerializer, CourseSerializer, LessonSerializer,
     EnrollmentSerializer, LessonProgressSerializer
+)
+
+@extend_schema(
+    summary='Listar cursos',
+    description='Lista todos os cursos ativos com filtros opcionais',
+    parameters=[
+        OpenApiParameter(
+            name='category',
+            type=OpenApiTypes.INT,
+            location=OpenApiParameter.QUERY,
+            description='ID da categoria para filtrar'
+        ),
+        OpenApiParameter(
+            name='difficulty',
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description='Nível de dificuldade',
+            enum=['beginner', 'intermediate', 'advanced']
+        ),
+    ],
+    responses={200: CourseSerializer(many=True)},
+    tags=['Cursos']
 )
 
 class CategoryListView(generics.ListAPIView):
@@ -35,6 +58,16 @@ class CourseDetailView(generics.RetrieveAPIView):
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated]
 
+@extend_schema(
+    summary='Inscrever-se em curso',
+    description='Inscreve o usuário logado em um curso específico',
+    responses={
+        201: OpenApiResponse(description='Inscrição realizada com sucesso'),
+        200: OpenApiResponse(description='Usuário já estava inscrito'),
+        404: OpenApiResponse(description='Curso não encontrado')
+    },
+    tags=['Cursos']
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def enroll_course(request, course_id):
