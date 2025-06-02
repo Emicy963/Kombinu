@@ -1,6 +1,27 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
+from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from .models import User, UserProfile
+
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            'Exemplo de Registro',
+            summary='Dados para criar nova conta',
+            description='Exemplo completo de dados para registro de usuário',
+            value={
+                'username': 'joao123',
+                'email': 'joao@email.com',
+                'first_name': 'João',
+                'last_name': 'Silva',
+                'user_type': 'student',
+                'phone': '123456789',
+                'password': 'senha123456',
+                'password_confirm': 'senha123456'
+            }
+        )
+    ]
+)
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """Serializer for user registration."""
