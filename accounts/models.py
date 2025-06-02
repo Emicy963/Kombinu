@@ -18,3 +18,13 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"
+    
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    preferred_language = models.CharField(max_length=10, default='pt')
+    notification_preferences = models.JSONField(default=dict)
+    
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
