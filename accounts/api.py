@@ -1,6 +1,8 @@
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .serializers import (
     UserRegistrationSerializer, UserSerializer, UserProfileSerializer, LoginSerializer)
@@ -18,4 +20,16 @@ class RegisterView(generics.CreateAPIView):
         return Response({
             'user': UserSerializer(user).data,
             'token': token.key
-        }, status=status.HTTP_201_CREATED)  
+        }, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login_view(request):
+    serializer = LoginSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = serializer.validated_data['user']
+    token, created = Token.objects.get_or_create(user=user)
+    return Response({
+        'user': UserSerializer(user).data,
+        'token': token.key
+    }, status=status.HTTP_200_OK)
