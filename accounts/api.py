@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiExample
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
@@ -10,6 +11,35 @@ from .serializers import (
 
 # Get the custom user model
 User = get_user_model()
+
+@extend_schema(
+    summary='Registrar novo usuário',
+    description='Cria uma nova conta de usuário e retorna os dados do usuário junto com o token de autenticação',
+    responses={
+        201: OpenApiResponse(
+            response=UserSerializer,
+            description='Usuário criado com sucesso',
+            examples=[
+                OpenApiExample(
+                    'Sucesso',
+                    value={
+                        'user': {
+                            'id': 1,
+                            'username': 'joao123',
+                            'email': 'joao@email.com',
+                            'first_name': 'João',
+                            'last_name': 'Silva',
+                            'user_type': 'student'
+                        },
+                        'token': '9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
+                    }
+                )
+            ]
+        ),
+        400: OpenApiResponse(description='Dados inválidos')
+    },
+    tags=['Autenticação']
+)
 
 class RegisterView(generics.CreateAPIView):
     """View to handle user registration."""
@@ -27,6 +57,32 @@ class RegisterView(generics.CreateAPIView):
             'user': UserSerializer(user).data,
             'token': token.key
         }, status=status.HTTP_201_CREATED)
+    
+@extend_schema(
+    summary='Login de usuário',
+    description='Autentica um usuário existente e retorna o token de acesso',
+    request=LoginSerializer,
+    responses={
+        200: OpenApiResponse(
+            description='Login realizado com sucesso',
+            examples=[
+                OpenApiExample(
+                    'Sucesso',
+                    value={
+                        'user': {
+                            'id': 1,
+                            'username': 'joao123',
+                            'email': 'joao@email.com'
+                        },
+                        'token': '9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
+                    }
+                )
+            ]
+        ),
+        400: OpenApiResponse(description='Credenciais inválidas')
+    },
+    tags=['Autenticação']
+)
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
