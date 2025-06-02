@@ -3,10 +3,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import UserProfile
 from .serializers import (
     UserRegistrationSerializer, UserSerializer, UserProfileSerializer, LoginSerializer)
+
+# Get the custom user model
+User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
     """View to handle user registration."""
