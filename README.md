@@ -1,13 +1,24 @@
-# Projeto Django - Sistema de Autenticação e Dashboard
+# Kombinu - Plataforma Educacional
 
-Este é um projeto Django que implementa um sistema de autenticação de usuários com login, registro e dashboard protegido.
+Sistema Django com API REST para gestão de cursos, usuários, quizzes e gamificação educacional.
 
 ## Funcionalidades
 
-- Cadastro de usuários
-- Login e logout
-- Redirecionamento para um dashboard protegido
+### Sistema Web
+
+- Sistema de autenticação completo (login, registro, logout)
+- Dashboard protegido para usuários autenticados
+- Interface responsiva e intuitiva
 - Mensagens de feedback para os usuários
+
+### API REST
+
+- **Autenticação por Token**: Sistema seguro de autenticação
+- **Gestão de Usuários**: Registro, login, perfis e preferências
+- **Cursos e Categorias**: Sistema completo de gestão educacional
+- **Progresso de Aprendizagem**: Acompanhamento detalhado do progresso
+- **Inscrições**: Sistema de matrícula em cursos
+- **Documentação Interativa**: Swagger/OpenAPI integrado
 
 ## Requisitos
 
@@ -15,89 +26,173 @@ Antes de iniciar, certifique-se de ter instalado:
 
 - Python 3.8+
 - Django 4+
+- Django REST Framework
 - Pip e virtualenv (recomendado)
 
 ## Instalação e Configuração
 
-1. Clone este repositório:
+1. **Clone este repositório:**
 
-   ```sh
+   ```bash
    git clone https://github.com/Emcy963/Kombinu.git
-   cd seu-repositorio
+   cd Kombinu
    ```
 
-2. Crie e ative um ambiente virtual:
+2. **Crie e ative um ambiente virtual:**
 
-   ```sh
+   ```bash
    python -m venv .venv
    source .venv/bin/activate  # Linux/macOS
-   .venv\Scripts\activate  # Windows
+   .venv\Scripts\activate     # Windows
    ```
 
-3. Instale as dependências:
+3. **Instale as dependências:**
 
-   ```sh
+   ```bash
    pip install -r requirements.txt
    ```
 
-4. Configure as migrações do banco de dados:
+4. **Configure as migrações do banco de dados:**
 
-   ```sh
+   ```bash
+   python manage.py makemigrations
    python manage.py migrate
    ```
 
-5. Crie um superusuário para acessar o painel de administração:
+5. **Crie um superusuário:**
 
-   ```sh
+   ```bash
    python manage.py createsuperuser
    ```
 
-6. Inicie o servidor:
+6. **Inicie o servidor:**
 
-   ```sh
+   ```bash
    python manage.py runserver
    ```
 
-7. Acesse o sistema no navegador:
-   - Página inicial: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-   - Admin: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+7. **Acesse o sistema:**
+
+   - **Página inicial**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+   - **Dashboard**: [http://127.0.0.1:8000/dashboard/](http://127.0.0.1:8000/dashboard/)
+   - **Admin**: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+   - **API Docs (Swagger)**: [http://127.0.0.1:8000/api/docs/](http://127.0.0.1:8000/api/docs/)
+   - **API Schema**: [http://127.0.0.1:8000/api/redoc/](http://127.0.0.1:8000/api/redoc/)
 
 ## Estrutura do Projeto
 
-```bash
+```
 Kombinu/
-│── accounts/
+├── accounts/              # App de autenticação
 │   ├── migrations/
 │   ├── templates/accounts/
-│   ├── views.py
-│   ├── urls.py
+│   ├── views.py          # Views web
+│   ├── api.py           # Views da API
+│   ├── urls.py          # URLs web
+│   ├── urls_api.py      # URLs da API
 │   ├── models.py
-│   ├── forms.py
-│── dashboard/
+│   └── forms.py
+├── courses/              # App de cursos
+│   ├── migrations/
+│   ├── views.py         # Views da API de cursos
+│   ├── urls.py          # URLs da API de cursos
+│   ├── models.py
+│   └── serializers.py
+├── dashboard/            # App do dashboard
 │   ├── templates/dashboard/
 │   ├── views.py
-│   ├── urls.py
-│── templates/
-│   ├── base.html
-│── manage.py
-│── requirements.txt
-│── README.md
+│   └── urls.py
+├── templates/           # Templates globais
+│   └── base.html
+├── static/             # Arquivos estáticos
+├── media/              # Arquivos de mídia
+├── manage.py
+├── requirements.txt
+└── README.md
 ```
 
 ## Rotas Principais
 
-| Rota          | Descrição |
-|--------------|------------|
-| `/`          | Página inicial |
-| `/accounts/register/` | Registro de user-admin |
-| `/accounts/login/`    | Login de user-admin |
-| `/accounts/logout/`   | Logout |
-| `/dashboard/`  | Dashboard (requer login) |
+### Interface Web
+
+| Rota | Descrição |
+|------|-----------|
+| `/` | Página inicial |
+| `/login/` | Login de usuários |
+| `/dashboard/` | Dashboard (requer login) |
+| `/termos_condicoes/` | Termos e condições |
+
+### API REST
+
+| Rota | Descrição |
+|------|-----------|
+| `/api/auth/register/` | Registro de usuários |
+| `/api/auth/login/` | Login (obter token) |
+| `/api/auth/logout/` | Logout (invalidar token) |
+| `/api/auth/profile/` | Perfil do usuário |
+| `/api/courses/` | Listar cursos |
+| `/api/courses/{id}/` | Detalhes do curso |
+| `/api/courses/categories/` | Categorias de cursos |
+| `/api/courses/my-courses/` | Meus cursos |
+| `/api/courses/{id}/enroll/` | Inscrever-se em curso |
+
+### Documentação
+
+| Rota | Descrição |
+|------|-----------|
+| `/api/docs/` | Documentação Swagger |
+| `/api/redoc/` | Documentação ReDoc |
+| `/api/schema/` | Schema OpenAPI |
+
+## Documentação da API
+
+Para informações detalhadas sobre como usar a API, consulte nossa **[Documentação da API](docs/API_DOCUMENTATION.md)** que inclui:
+
+- Guia completo de endpoints
+- Exemplos de requisições e respostas
+- Códigos de erro e suas descrições
+- Fluxos de uso comuns
+- Boas práticas de implementação
+
+Você também pode acessar a documentação interativa através das rotas `/api/docs/` (Swagger) ou `/api/redoc/` (ReDoc) quando o servidor estiver rodando.
+
+## Tecnologias Utilizadas
+
+- **Backend**: Django 4+, Django REST Framework
+- **Banco de Dados**: SQLite (desenvolvimento) / PostgreSQL (produção)
+- **Autenticação**: Token-based authentication
+- **Documentação**: drf-spectacular (OpenAPI/Swagger)
+- **Frontend**: HTML5, CSS3, JavaScript
+
+## Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## Autores
+
+### Chefe do Projeto
+
+- **Anderson Cafurica** - *Desenvolvedor Principal*
+  - GitHub: [@Emicy963](https://github.com/Emicy963)
+  - Email: andersonpaulo931@gmail.com
+  - LinkedIn: [Anderson Cafurica](https://linkedin.com/in/anderson-cafurica)
+
+### Equipe de Desenvolvimento
+
+- **DOMAG Tech** - *Desenvolvimento e Suporte*
 
 ## Contato
 
-Se tiver alguma dúvida ou sugestão, entre em contato pelo GitHub!
+Se tiver alguma dúvida, sugestão ou quiser contribuir com o projeto, entre em contato através do GitHub ou pelos contatos do chefe do projeto listados acima.
 
-## Autor
+---
 
-DOMAG Tech
+**Kombinu** - Transformando a educação através da tecnologia 🚀
