@@ -2,6 +2,16 @@
 
 Sistema Django com API REST para gestão de cursos, usuários, quizzes e gamificação educacional.
 
+## 🌐 Aplicação Online
+
+A aplicação está disponível online em: **[https://kombinu.onrender.com](https://kombinu.onrender.com)**
+
+### Acesso Rápido à Documentação da API
+
+- **Documentação Swagger**: [https://kombinu.onrender.com/api/docs/](https://kombinu.onrender.com/api/docs/)
+- **Documentação ReDoc**: [https://kombinu.onrender.com/api/redoc/](https://kombinu.onrender.com/api/redoc/)
+- **Schema OpenAPI**: [https://kombinu.onrender.com/api/schema/](https://kombinu.onrender.com/api/schema/)
+
 ## Funcionalidades
 
 ### Sistema Web
@@ -71,7 +81,7 @@ Antes de iniciar, certifique-se de ter instalado:
    python manage.py runserver
    ```
 
-7. **Acesse o sistema:**
+7. **Acesse o sistema localmente:**
 
    - **Página inicial**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
    - **Dashboard**: [http://127.0.0.1:8000/dashboard/](http://127.0.0.1:8000/dashboard/)
@@ -138,11 +148,41 @@ Kombinu/
 
 ### Documentação
 
-| Rota | Descrição |
-|------|-----------|
-| `/api/docs/` | Documentação Swagger |
-| `/api/redoc/` | Documentação ReDoc |
-| `/api/schema/` | Schema OpenAPI |
+| Rota | Descrição | URL de Produção |
+|------|-----------|----------------|
+| `/api/docs/` | Documentação Swagger | [https://kombinu.onrender.com/api/docs/](https://kombinu.onrender.com/api/docs/) |
+| `/api/redoc/` | Documentação ReDoc | [https://kombinu.onrender.com/api/redoc/](https://kombinu.onrender.com/api/redoc/) |
+| `/api/schema/` | Schema OpenAPI | [https://kombinu.onrender.com/api/schema/](https://kombinu.onrender.com/api/schema/) |
+
+## Testando a API
+
+### Ambiente de Produção
+
+Para testar a API diretamente no ambiente de produção, utilize a base URL:
+```
+https://kombinu.onrender.com/api/
+```
+
+### Exemplo de Uso
+
+```bash
+# Registrar um novo usuário
+curl -X POST https://kombinu.onrender.com/api/auth/register/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "testuser",
+    "email": "test@example.com",
+    "password": "securepassword123"
+  }'
+
+# Fazer login
+curl -X POST https://kombinu.onrender.com/api/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "testuser",
+    "password": "securepassword123"
+  }'
+```
 
 ## Documentação da API
 
@@ -154,7 +194,12 @@ Para informações detalhadas sobre como usar a API, consulte nossa **[Documenta
 - Fluxos de uso comuns
 - Boas práticas de implementação
 
-Você também pode acessar a documentação interativa através das rotas `/api/docs/` (Swagger) ou `/api/redoc/` (ReDoc) quando o servidor estiver rodando.
+Você também pode acessar a documentação interativa através das rotas:
+- **Produção**: 
+
+[https://kombinu.onrender.com/api/docs/](https://kombinu.onrender.com/api/docs/) (Swagger) ou [https://kombinu.onrender.com/api/redoc/](https://kombinu.onrender.com/api/redoc/) (ReDoc)
+
+- **Desenvolvimento**: `/api/docs/` (Swagger) ou `/api/redoc/` (ReDoc)
 
 ## Tecnologias Utilizadas
 
@@ -163,6 +208,7 @@ Você também pode acessar a documentação interativa através das rotas `/api/
 - **Autenticação**: Token-based authentication
 - **Documentação**: drf-spectacular (OpenAPI/Swagger)
 - **Frontend**: HTML5, CSS3, JavaScript
+- **Deploy**: Render (Produção)
 
 ## Contribuição
 
@@ -196,3 +242,5 @@ Se tiver alguma dúvida, sugestão ou quiser contribuir com o projeto, entre em 
 ---
 
 **Kombinu** - Transformando a educação através da tecnologia 🚀
+
+**🌐 Acesse agora**: [https://kombinu.onrender.com](https://kombinu.onrender.com)
