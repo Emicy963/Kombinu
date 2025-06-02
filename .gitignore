@@ -1,7 +1,60 @@
+# Ambiente virtual
 .venv/
-__pycache__/
+env/
+venv/
 
+# Arquivos de configuração pessoais
+*.env
+.env
+
+# Compilados do Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Logs
+*.log
+
+# Base de dados local
 *.sqlite3
 *.db
-*.env
+
+# Arquivos temporários
+*.bak
+*.swp
+*.tmp
+*.DS_Store
+Thumbs.db
+
+# Arquivos do sistema
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Arquivos do editor
+.vscode/
+.idea/
+*.code-workspace
+
+# Arquivos do PyCharm
+*.iml
+*.ipr
+*.iws
+
+# Arquivos do Django
+staticfiles/
+media/
+db.sqlite3
+
+# Arquivos de migrações (exceto o __init__.py)
+**/migrations/
+!**/migrations/__init__.py
+
+# Arquivos extras
 *.docx
+*.egg
+*.egg-info/
+dist/
+build/
