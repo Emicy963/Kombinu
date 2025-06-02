@@ -1,18 +1,21 @@
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from .models import UserProfile
 from .serializers import (
     UserRegistrationSerializer, UserSerializer, UserProfileSerializer, LoginSerializer)
 
 class RegisterView(generics.CreateAPIView):
+    """View to handle user registration."""
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
     
     def create(self, request, *args, **kwargs):
+        """Handle user registration and return auth token."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -25,6 +28,7 @@ class RegisterView(generics.CreateAPIView):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_view(request):
+    """Handle user login and return auth token."""
     serializer = LoginSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = serializer.validated_data['user']
@@ -37,8 +41,19 @@ def login_view(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def logout_view(request):
+    """Handle user logout by deleting the auth token."""
     try:
         request.user.auth_token.delete()
         return Response({'message': 'Logout realizado com sucesso.'}, status=status.HTTP_200_OK)
     except:
         return Response({'error': 'Erro ao realizar logout.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+class ProfileView(generics.RetrieveUpdateAPIView):
+    """View to retrieve and update the user's profile."""
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self):
+        """Return the profile of the authenticated user."""
+        profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+        return profile
