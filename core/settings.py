@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'dasboard.apps.DasboardConfig',
+    'courses.apps.CoursesConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',

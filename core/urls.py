@@ -16,6 +16,7 @@ urlpatterns = [
 
     # API urls
     path('api/', include('accounts.urls_api')),
+    path('api/', include('courses.urls')),
 ]
 
 if settings.DEBUG:
