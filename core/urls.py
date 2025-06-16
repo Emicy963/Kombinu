@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import start_view
+from accounts.views import login_view, register_view
 from dasboard.views import home_view, dashboard_overview, termos_condicoes
 from django.conf import settings
 from django.conf.urls.static import static
@@ -11,7 +11,8 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('dashboard/', dashboard_overview, name='overview'),
     path('temos_condicoes/', termos_condicoes, name='termos'),
-    path('login/', start_view, name='login'),
+    path('login/', login_view, name='login'),
+    path('register/', register_view, name='register'),
     #path('accounts/', include('accounts.urls')),
     #path('dashboard/', home_view, name='dashboard'),
 

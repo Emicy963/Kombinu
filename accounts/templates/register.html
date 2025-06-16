@@ -1,71 +1,256 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOMAG TECH - Sistema de Gestão Educacional</title>
-    <link rel="shortcut icon" href="./LOGO DOMAG.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style></style>
+  <meta charset="UTF-8">
+  <title>KOMBINU - Registro</title>
+  <link rel="shortcut icon" href="static/media/1-removebg-preview - Cópia.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #294B6C;
+      font-family: 'Lato', Arial, sans-serif;
+    }
+
+    .login-container {
+      width: 400px;
+      margin: 80px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0px 4px 9px #171a1f1C, 0px 0px 2px #171a1f1F;
+      padding: 48px 40px 40px 40px;
+      position: relative;
+    }
+
+    .login-title {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #294B6C;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .login-subtitle {
+      font-size: 18px;
+      color: #323743;
+      text-align: center;
+      margin-bottom: 32px;
+      font-family: 'Lato', Arial, sans-serif;
+    }
+
+    .login-form label {
+      display: block;
+      font-size: 16px;
+      font-family: 'Lato', Arial, sans-serif;
+      color: #294B6C;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      border: 1px solid #BDC1CA;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: 'Lato', Arial, sans-serif;
+      background: #F8F9FA;
+      color: #171A1F;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .login-form input[type="text"]:focus,
+    .login-form input[type="password"]:focus {
+      border-color: #294B6C;
+      outline: none;
+    }
+
+    /* Estilos específicos para campos do Django Form */
+    .login-form input[type="text"],
+    .login-form input[type="password"],
+    .login-form #id_username,
+    .login-form #id_password1,
+    .login-form #id_password2 {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      border: 1px solid #BDC1CA;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: 'Lato', Arial, sans-serif;
+      background: #F8F9FA;
+      color: #171A1F;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .login-form #id_username:focus,
+    .login-form #id_password1:focus,
+    .login-form #id_password2:focus {
+      border-color: #294B6C;
+      outline: none;
+    }
+
+    .login-form .required {
+      color: #FFD93D;
+      margin-left: 2px;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      height: 48px;
+      background: #294B6C;
+      color: #FFD93D;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0px 4px 9px #171a1f1C, 0px 0px 2px #171a1f1F;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 12px;
+      text-decoration: none;
+      text-align: center;
+      line-height: 48px;
+    }
+
+    .button:hover {
+      background: #223E5A;
+      color: #FFD93D;
+    }
+
+    .login-form .footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #294B6C;
+    }
+
+    /* Estilos para mensagens de erro/sucesso */
+    .messages {
+      margin-bottom: 20px;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .alert-error {
+      background-color: #fee;
+      border: 1px solid #fcc;
+      color: #a00;
+    }
+
+    .alert-success {
+      background-color: #efe;
+      border: 1px solid #cfc;
+      color: #060;
+    }
+
+    /* Estilos para erros de validação */
+    .errorlist {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+    }
+
+    .errorlist li {
+      background-color: #fee;
+      border: 1px solid #fcc;
+      color: #a00;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .field-wrapper {
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 500px) {
+      .login-container {
+        width: 98vw;
+        padding: 24px 4vw 24px 4vw;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="container container-login">
-            <h1>Cadastro</h1>
-            <div class="img-fluid">
-                <img src="{% static 'media/LOGO_DOMAG.png' %}" alt="DOMAG Tech Logo">
-            </div>  
-            <form method="POST" action="{% url 'register' %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
-            </form>
-            <p>Já tem conta? <a href="{% url 'login' %}">Faça login</a></p>
+  <div class="login-container">
+    <div class="login-title">Criar Conta</div>
+    <div class="login-subtitle">Registre-se para começar</div>
+    
+    <!-- Exibição de mensagens -->
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="login-form">
+      <form action="" method="post">
+        {% csrf_token %}
+        
+        <div class="field-wrapper">
+          <label for="id_username">Username<span class="required">*</span></label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <ul class="errorlist">
+              {% for error in form.username.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
         </div>
 
-        <div class="side-decoration side-decoration-left"></div>
-        <div class="side-decoration side-decoration-right"></div>
+        <div class="field-wrapper">
+          <label for="id_password1">Senha<span class="required">*</span></label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+            <ul class="errorlist">
+              {% for error in form.password1.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+
+        <div class="field-wrapper">
+          <label for="id_password2">Confirme a sua senha<span class="required">*</span></label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+            <ul class="errorlist">
+              {% for error in form.password2.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="button">Registrar</button>
+      </form>
+      
+      <div class="footer">
+        Já tem conta? <a href="{% url 'login' %}" style="color: #294B6C; text-decoration: underline;">Faça login aqui</a><br>
+        Termos e Condições! <a href="{% url 'termos' %}" style="color: #294B6C; text-decoration: underline;">Aqui</a>
+      </div>
     </div>
-
-    <div class="toast-container" id="toastContainer"></div>
-
-    <script>
-        function showToast(message, type = 'success') {
-            const toastContainer = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <span>${message}</span>
-                <span class="toast-close"><i class="fas fa-times"></i></span>
-            `;
-            
-            toastContainer.appendChild(toast);
-            
-            toast.querySelector('.toast-close').addEventListener('click', function() {
-                toast.remove();
-            });
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 5000);
-        }
-
-        function showSpinner() {
-            const spinner = document.createElement('div');
-            spinner.className = 'spinner-overlay';
-            spinner.innerHTML = '<div class="spinner"></div>';
-            document.body.appendChild(spinner);
-        }
-
-        function hideSpinner() {
-            const spinner = document.querySelector('.spinner-overlay');
-            if (spinner) {
-                spinner.remove();
-            }
-        }
-    </script>
+  </div>
 </body>
 </html>
