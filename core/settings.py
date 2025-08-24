@@ -21,21 +21,29 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default=[])
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts.apps.AccountsConfig',
-    'dasboard.apps.DasboardConfig',
-    'courses.apps.CoursesConfig',
+]
+
+THIRD_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'drf_spectacular',
 ]
+
+LOCAL_APPS = [
+    # 'accounts.apps.AccountsConfig',
+    # 'dasboard.apps.DasboardConfig',
+    # 'courses.apps.CoursesConfig',
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,7 +61,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
