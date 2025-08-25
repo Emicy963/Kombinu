@@ -39,8 +39,7 @@ THIRD_APPS = [
 
 LOCAL_APPS = [
     'apps.accounts.apps.AccountsConfig',
-    # 'dasboard.apps.DasboardConfig',
-    # 'courses.apps.CoursesConfig',
+    "apps.contents.apps.ContentsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + LOCAL_APPS
@@ -78,7 +77,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Personalization User Model
-AUTH_USER_MODEL = 'apps.accounts.User'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

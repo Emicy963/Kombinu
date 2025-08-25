@@ -6,7 +6,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/auth/", include("apps.accounts.urls"))
+    path("api/auth/", include("apps.accounts.urls")),
+    path("api/contents/", include("apps.contents")),
 
     # Documentation
     # path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
