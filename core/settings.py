@@ -39,8 +39,7 @@ THIRD_APPS = [
 
 LOCAL_APPS = [
     'apps.accounts.apps.AccountsConfig',
-    # 'dasboard.apps.DasboardConfig',
-    # 'courses.apps.CoursesConfig',
+    "apps.contents.apps.ContentsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + LOCAL_APPS
