@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Personalization User Model
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'apps.accounts.User'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
