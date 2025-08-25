@@ -34,11 +34,11 @@ THIRD_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'drf_spectacular',
+    # 'drf_spectacular',
 ]
 
 LOCAL_APPS = [
-    # 'accounts.apps.AccountsConfig',
+    'apps.accounts.apps.AccountsConfig',
     # 'dasboard.apps.DasboardConfig',
     # 'courses.apps.CoursesConfig',
 ]
@@ -149,7 +149,7 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Kombinu API',
     'DESCRIPTION': 'API da plataforma educacional Kombinu',
-    'VERSION': '1.0.0',
+    'VERSION': '2.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
     'AUTHENTICATION_WHITELIST': [
