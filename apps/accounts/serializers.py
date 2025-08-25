@@ -17,3 +17,9 @@ class UserRegistratioSerializer(serializers.ModelSerializer):
             user_type=validated_data["user_type"]
         )
         return user
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ("id", "email", "user_type")
+        read_only_fields = ("id", "email", "user_type")
