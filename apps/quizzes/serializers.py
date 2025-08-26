@@ -37,3 +37,7 @@ class QuizSubmissionSerializer(serializers.ModelSerializer):
     
     def validate(self, data):
         return data
+
+class QuizGenerationSerializer(serializers.Serializer):
+    difficulty = serializers.ChoiceField(choices=["easy", "medium", "hard"], required=False)
+    number_of_question = serializers.IntegerField(min_value=1, max_value=50, required=False, default=10)
