@@ -23,3 +23,7 @@ class QuizDetailSerializer(serializers.ModelSerializer):
         model = Quiz
         fields = ("pk", "title", "content", "questions")
         read_only_fields = ("pk", "title", "content", "questions")
+
+class QuizAnswerSubmissionSerializer(serializers.ModelSerializer):
+    question_id = serializers.UUIDField()
+    selected_option_id = serializers.UUIDField()
