@@ -1,4 +1,5 @@
 from django.db import models
+from apps.accounts.models import CustomUser
 from apps.contents.models import Content
 
 class Quiz(models.Model):
@@ -23,3 +24,15 @@ class Option(models.Model):
 
     def __str__(self):
         return f"{self.text[:30]}... ({"Correct" if self.is_correct else "Incorrect"})"
+
+class QuizSubmission(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    score = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ("user", "quiz") # Um usuário só pode submeter um quiz uma vez
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.quiz.title} - Score: {self.score}"
