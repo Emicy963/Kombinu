@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Option, Question, Quiz
+from .models import Option, Question, Quiz, QuizSubmission
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -27,3 +27,13 @@ class QuizDetailSerializer(serializers.ModelSerializer):
 class QuizAnswerSubmissionSerializer(serializers.ModelSerializer):
     question_id = serializers.UUIDField()
     selected_option_id = serializers.UUIDField()
+
+class QuizSubmissionSerializer(serializers.ModelSerializer):
+    answer = QuizAnswerSubmissionSerializer(many=True)
+
+    class Meta:
+        model = QuizSubmission
+        fields = ("answers")
+    
+    def validate(self, data):
+        return data
