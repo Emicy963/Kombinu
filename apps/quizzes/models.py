@@ -15,3 +15,11 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question_test[:50]
+
+class Option(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="options")
+    text = models.CharField(max_length=500)
+    is_correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.text[:30]}... ({"Correct" if self.is_correct else "Incorrect"})"
