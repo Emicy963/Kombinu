@@ -24,3 +24,15 @@ def get_opentdb_categories():
     except requests.RequestException as e:
         logger.error("Erro ao buscar categorias da Open Trivia DB: {e}")
         return {}
+
+def map_local_category_to_opentdb(local_category):
+    """Mapeia a categoria local para o ID da Open Trivia DB."""
+    # Atualiza o mapeamento com os IDs reais
+    opentdb_categories = get_opentdb_categories()
+    # Exemplo de mapeamento mais dinâmico
+    mapping = {
+        "tecnologia": opentdb_categories.get("Science: Computers", ""),
+        "negocios": "", # Qualquer categoria ou específica
+        "design": "", # Qualquer categoria ou específica
+    }
+    return mapping.get(local_category, "") # Retorna vazio para "Any Category"
