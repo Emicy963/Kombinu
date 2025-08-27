@@ -40,6 +40,7 @@ THIRD_APPS = [
 LOCAL_APPS = [
     'apps.accounts.apps.AccountsConfig',
     "apps.contents.apps.ContentsConfig",
+    "apps.quizzes.apps.QuizzesConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + LOCAL_APPS
