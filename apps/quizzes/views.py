@@ -3,8 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from .serializers import QuizDetailSerializer, QuizGenerationSerializer
-from .models import Quiz, Content
+from django.db import transaction
+from .serializers import QuizDetailSerializer, QuizGenerationSerializer, QuizSubmissionSerializer
+from .models import Option, Question, Quiz, Content, QuizAnswer, QuizSubmission
 from .services import generate_quiz_from_opentdb
 
 
@@ -43,3 +44,77 @@ class QuizGenerationView(APIView):
             }, status=status.HTTP_201_CREATED)
         else:
             return Response({"error": "Failed to generate quiz from Open Trivia DB."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class QuizSubmissionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, quiz_id):
+        quiz = get_object_or_404(Quiz, id=quiz_id)
+        user = request.user
+
+        # Verificar se o usuário já respondeu a este quiz
+        if QuizSubmission.objects.filter(user=user, quiz=quiz).exists():
+            return Response({"error": "You have already submitted this quiz."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = QuizSubmissionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        answer_data = serializer.validated_data["answers"]
+
+        # Validação adicional: se todas as questões e opções pertecem ao quiz
+        submitted_question_ids = set()
+        for answer_data in answer_data:
+            submitted_question_ids.add(answer_data["question_id"])
+        
+        quiz_question_ids = set(quiz.questions.value_list("pk", flat=True))
+        if not submitted_question_ids.issubset(quiz_question_ids):
+            return Response({"error": "One or more question do not belong to this quiz."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Calcula a pontuação e cria a submissão
+        correct_count = 0
+        details = []
+
+        with transaction.atomic():
+            submission = QuizSubmission.objects.create(user=user, quiz=quiz, score=0) # Score temporário
+
+            for answer_data in answer_data:
+                question_id = answer_data["question_id"]
+                selected_option_id = answer_data["selected_option_id"]
+
+                try:
+                    question = quiz.questions.get(pk=question_id)
+                except Question.DoesNotExist:
+                    continue
+                
+                try:
+                    selected_option = question.options.get(id=selected_option_id)
+                except Option.DoesNotExist:
+                    return Response({"error": f"Option {selected_option_id} does not exist for question {question_id}."}, status=status.HTTP_400_BAD_REQUEST)
+                
+                is_correct = selected_option.is_correct
+                if is_correct:
+                    correct_count += 1
+                
+                QuizAnswer.objects.create(
+                    submission=submission,
+                    question=question,
+                    selected_option=selected_option
+                )
+
+                details.append({
+                    "question_id": str(question_id),
+                    "correct": is_correct,
+                    "correct_option_id": str(question.options.filter(is_correct=True).first().id) if is_correct else None
+                })
+            
+            # Atualiza o score
+            submission.score = correct_count
+            submission.save()
+        
+        total_questions = quiz.questions.count()
+        return Response({
+            "score": correct_count,
+            "total_questions": total_questions,
+            "correct_answers": correct_count,
+            "details": details
+        }, status=status.HTTP_200_OK)
