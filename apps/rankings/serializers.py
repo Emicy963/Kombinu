@@ -9,3 +9,7 @@ class TopUserSerializer(serializers.Serializer):
 class UserPositionSerializer(serializers.Serializer):
     position = serializers.IntegerField()
     total_score = serializers.IntegerField()
+
+class GlobalRankingSerializer(serializers.Serializer):
+    top_users = TopUserSerializer(many=True)
+    user_position = UserPositionSerializer()
