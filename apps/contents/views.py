@@ -17,7 +17,7 @@ class ContentViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return ContentListSerializer
         return ContentSerializer
-    
+
     def get_permissions(self):
         """
         Instancia e retorna a lista de permissões que esta view requer
@@ -27,10 +27,10 @@ class ContentViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
-    
+
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
-    
+
     def get_queryset(self):
         queryset = super().get_queryset()
         has_quiz_param = self.request.query_params.get("has_quiz", None)
