@@ -9,7 +9,8 @@ from .serializers import (
     QuizGenerationSerializer,
     QuizSubmissionSerializer,
 )
-from .models import Option, Question, Quiz, Content, QuizAnswer, QuizSubmission
+from .models import Option, Question, Quiz, QuizAnswer, QuizSubmission
+from apps.contents.models import Content
 from .services import generate_quiz_from_opentdb
 
 
@@ -30,6 +31,7 @@ class QuizGenerationView(APIView):
                 {"error": "Only creators can generate quizzes."},
                 status=status.HTTP_403_FORBIDDEN,
             )
+
         content = get_object_or_404(Content, id=content_id)
         serializer = QuizGenerationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -37,7 +39,7 @@ class QuizGenerationView(APIView):
         difficulty = serializer.validated_data.get("difficulty")
         number_of_questions = serializer.validated_data.get("number_of_questions")
 
-        # Verifica se já um quiz para este conteúdo
+        # Verifica se já existe um quiz para este conteúdo
         if hasattr(content, "quiz"):
             return Response(
                 {"error": "A quiz already exists for this content."},
@@ -50,7 +52,7 @@ class QuizGenerationView(APIView):
         if quiz:
             return Response(
                 {
-                    "message": "Quiz generated successfuly",
+                    "message": "Quiz generated successfully",
                     "quiz_id": str(quiz.pk),
                     "content_id": str(content.pk),
                 },
@@ -80,32 +82,31 @@ class QuizSubmissionView(APIView):
         serializer = QuizSubmissionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        answer_data = serializer.validated_data["answers"]
+        answers_data = serializer.validated_data["answers"]
 
-        # Validação adicional: se todas as questões e opções pertecem ao quiz
+        # Validação adicional: se todas as questões pertencem ao quiz
         submitted_question_ids = set()
-        for answer_data in answer_data:
-            submitted_question_ids.add(answer_data["question_id"])
+        for answer in answers_data:
+            submitted_question_ids.add(answer["question_id"])
 
-        quiz_question_ids = set(quiz.questions.value_list("pk", flat=True))
+        quiz_question_ids = set(quiz.questions.values_list("pk", flat=True))
         if not submitted_question_ids.issubset(quiz_question_ids):
             return Response(
-                {"error": "One or more question do not belong to this quiz."},
+                {"error": "One or more questions do not belong to this quiz."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Calcula a pontuação e cria a submissão
         correct_count = 0
         details = []
 
         with transaction.atomic():
             submission = QuizSubmission.objects.create(
                 user=user, quiz=quiz, score=0
-            )  # Score temporário
+            )
 
-            for answer_data in answer_data:
-                question_id = answer_data["question_id"]
-                selected_option_id = answer_data["selected_option_id"]
+            for answer in answers_data:
+                question_id = answer["question_id"]
+                selected_option_id = answer["selected_option_id"]
 
                 try:
                     question = quiz.questions.get(pk=question_id)
@@ -132,15 +133,12 @@ class QuizSubmissionView(APIView):
                     selected_option=selected_option,
                 )
 
+                correct_option = question.options.filter(is_correct=True).first()
                 details.append(
                     {
                         "question_id": str(question_id),
                         "correct": is_correct,
-                        "correct_option_id": (
-                            str(question.options.filter(is_correct=True).first().id)
-                            if is_correct
-                            else None
-                        ),
+                        "correct_option_id": str(correct_option.id) if correct_option else None,
                     }
                 )
 
