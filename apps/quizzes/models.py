@@ -16,10 +16,10 @@ class Quiz(models.Model):
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="questions")
-    question_test = models.TextField()
+    question_text = models.TextField()
 
     def __str__(self):
-        return self.question_test[:50]
+        return self.question_text[:50]
 
 
 class Option(models.Model):
@@ -30,7 +30,7 @@ class Option(models.Model):
     is_correct = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.text[:30]}... ({"Correct" if self.is_correct else "Incorrect"})"
+        return f"{self.text[:30]}... ({'Correct' if self.is_correct else 'Incorrect'})"
 
 
 class QuizSubmission(models.Model):
@@ -40,10 +40,7 @@ class QuizSubmission(models.Model):
     score = models.PositiveIntegerField()
 
     class Meta:
-        unique_together = (
-            "user",
-            "quiz",
-        )  # Um usuário só pode submeter um quiz uma vez
+        unique_together = ("user", "quiz")
 
     def __str__(self):
         return f"{self.user.email} - {self.quiz.title} - Score: {self.score}"
@@ -51,7 +48,7 @@ class QuizSubmission(models.Model):
 
 class QuizAnswer(models.Model):
     submission = models.ForeignKey(
-        QuizSubmission, on_delete=models.CASCADE, related_name="answer"
+        QuizSubmission, on_delete=models.CASCADE, related_name="answers"
     )
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     selected_option = models.ForeignKey(Option, on_delete=models.CASCADE)
