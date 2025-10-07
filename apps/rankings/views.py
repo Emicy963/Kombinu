@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
-from quizzes.models import QuizSubmission
-from accounts.models import CustomUser
+from apps.quizzes.models import QuizSubmission
+from apps.accounts.models import CustomUser
 
 
 class GlobalRankingView(APIView):

@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from contents.models import Content
+from .models import Content
 
 
 class CreatorSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
 
     class Meta:
-        from accounts.models import CustomUser
+        from apps.accounts.models import CustomUser
 
         model = CustomUser
         fields = ("id", "name")
