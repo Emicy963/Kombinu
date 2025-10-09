@@ -7,8 +7,10 @@ class CustomUser(AbstractUser):
         ("creator", "Creator"),
         ("learner", "Learner"),
     )
+
+    email = models.EmailField(unique=True, blank=False)
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
-    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
