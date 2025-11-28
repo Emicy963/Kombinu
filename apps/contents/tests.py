@@ -1,6 +1,7 @@
 from django.test import TestCase
-from .model import Content
-from apps.accounts import CustomUser
+from apps.accounts.models import CustomUser
+from apps.contents.models import Content
+
 
 class ContentModelTest(TestCase):
     def setUp(self):
@@ -30,3 +31,23 @@ class ContentModelTest(TestCase):
     def test_quiz_id_property_without_quiz(self):
         """Testa a propriedade quiz_id quando não há quiz"""
         self.assertIsNone(self.content.quiz_id)
+
+    def test_content_str_representation(self):
+        """Testa a representação string do conteúdo"""
+        self.assertEqual(str(self.content), "Test Content")
+
+    def test_content_categories(self):
+        """Testa as categorias disponíveis"""
+        categories = ["tecnologia", "negocios", "design"]
+        for category in categories:
+            content = Content.objects.create(
+                title=f"Content {category}",
+                description="Test description",
+                creator=self.creator,
+                category=category
+            )
+            self.assertEqual(content.category, category)
+
+    def test_content_belongs_to_creator(self):
+        """Testa que o conteúdo pertence ao criador"""
+        self.assertIn(self.content, self.creator.created_contents.all())

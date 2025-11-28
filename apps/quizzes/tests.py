@@ -1,5 +1,8 @@
 from django.test import TestCase
-from .models import Quiz
+from apps.accounts.models import CustomUser
+from apps.contents.models import Content
+from apps.quizzes.models import Quiz, Question, Option, QuizSubmission, QuizAnswer
+
 
 class QuizModelTest(TestCase):
     def setUp(self):
@@ -29,6 +32,16 @@ class QuizModelTest(TestCase):
         """Testa se o conteúdo reconhece que tem um quiz"""
         self.assertTrue(self.content.has_quiz)
         self.assertEqual(self.content.quiz_id, self.quiz.id)
+
+    def test_one_to_one_relationship(self):
+        """Testa que um conteúdo pode ter apenas um quiz"""
+        from django.db import IntegrityError
+        with self.assertRaises(IntegrityError):
+            Quiz.objects.create(
+                title="Another Quiz",
+                content=self.content  # Mesmo conteúdo
+            )
+
 
 class QuestionAndOptionModelTest(TestCase):
     def setUp(self):
@@ -74,6 +87,10 @@ class QuestionAndOptionModelTest(TestCase):
         """Testa se a questão tem múltiplas opções"""
         self.assertEqual(self.question.options.count(), 2)
 
+    def test_question_belongs_to_quiz(self):
+        """Testa que a questão pertence ao quiz"""
+        self.assertIn(self.question, self.quiz.questions.all())
+
 
 class QuizSubmissionModelTest(TestCase):
     def setUp(self):
@@ -117,3 +134,60 @@ class QuizSubmissionModelTest(TestCase):
                 quiz=self.quiz,
                 score=5
             )
+
+    def test_submission_str_representation(self):
+        """Testa a representação string da submissão"""
+        expected = f"{self.learner.email} - {self.quiz.title} - Score: 8"
+        self.assertEqual(str(self.submission), expected)
+
+
+class QuizAnswerModelTest(TestCase):
+    def setUp(self):
+        learner = CustomUser.objects.create_user(
+            username="learner@example.com",
+            email="learner@example.com",
+            password="learnerpass123",
+            user_type="learner"
+        )
+        creator = CustomUser.objects.create_user(
+            username="creator@example.com",
+            email="creator@example.com",
+            password="creatorpass123",
+            user_type="creator"
+        )
+        content = Content.objects.create(
+            title="Test Content",
+            description="Test description",
+            creator=creator,
+            category="tecnologia"
+        )
+        quiz = Quiz.objects.create(title="Test Quiz", content=content)
+        self.question = Question.objects.create(
+            quiz=quiz,
+            question_text="What is 2+2?"
+        )
+        self.option = Option.objects.create(
+            question=self.question,
+            text="4",
+            is_correct=True
+        )
+        self.submission = QuizSubmission.objects.create(
+            user=learner,
+            quiz=quiz,
+            score=1
+        )
+        self.answer = QuizAnswer.objects.create(
+            submission=self.submission,
+            question=self.question,
+            selected_option=self.option
+        )
+
+    def test_answer_creation(self):
+        """Testa se a resposta foi criada corretamente"""
+        self.assertEqual(self.answer.submission, self.submission)
+        self.assertEqual(self.answer.question, self.question)
+        self.assertEqual(self.answer.selected_option, self.option)
+
+    def test_answer_belongs_to_submission(self):
+        """Testa que a resposta pertence à submissão"""
+        self.assertIn(self.answer, self.submission.answers.all())
