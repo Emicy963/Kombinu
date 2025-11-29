@@ -83,7 +83,7 @@ class ContentAPITest(APITestCase):
         self.client.force_authenticate(user=self.learner)
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
 
     def test_list_contents_unauthenticated(self):
         """Testa listar conteúdos sem autenticação"""
@@ -123,8 +123,8 @@ class ContentAPITest(APITestCase):
         
         # Filter has_quiz=true
         response = self.client.get(self.list_url, {"has_quiz": "true"})
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
         
         # Filter has_quiz=false
         response = self.client.get(self.list_url, {"has_quiz": "false"})
-        self.assertEqual(len(response.data), 0)
+        self.assertEqual(len(response.data['results']), 0)

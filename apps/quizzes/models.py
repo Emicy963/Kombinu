@@ -1,9 +1,11 @@
 from django.db import models
 from apps.accounts.models import CustomUser
 from apps.contents.models import Content
+import uuid
 
 
 class Quiz(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     content = models.OneToOneField(
         Content, on_delete=models.CASCADE, related_name="quiz"
@@ -15,6 +17,7 @@ class Quiz(models.Model):
 
 
 class Question(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="questions")
     question_text = models.TextField()
 
@@ -23,6 +26,7 @@ class Question(models.Model):
 
 
 class Option(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, related_name="options"
     )
