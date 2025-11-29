@@ -1,4 +1,7 @@
 from django.test import TestCase
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.urls import reverse
 from apps.accounts.models import CustomUser
 
 
@@ -49,3 +52,63 @@ class CustomUserModelTest(TestCase):
             user_type="learner"
         )
         self.assertEqual(learner.user_type, "learner")
+
+
+class AuthAPITest(APITestCase):
+    def setUp(self):
+        self.register_url = reverse("auth_register")
+        self.login_url = reverse("auth_login")
+        self.user_data = {
+            "email": "newuser@example.com",
+            "password": "newpassword123",
+            "first_name": "New",
+            "last_name": "User",
+            "user_type": "learner"
+        }
+        self.existing_user = CustomUser.objects.create_user(
+            username="existing@example.com",
+            email="existing@example.com",
+            password="existingpass123",
+            user_type="learner"
+        )
+
+    def test_register_user_success(self):
+        """Testa o registro de um novo usuário com sucesso"""
+        response = self.client.post(self.register_url, self.user_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(CustomUser.objects.count(), 2)
+        self.assertEqual(CustomUser.objects.get(email="newuser@example.com").first_name, "New")
+
+    def test_register_user_invalid_email(self):
+        """Testa o registro com email inválido"""
+        data = self.user_data.copy()
+        data["email"] = "invalid-email"
+        response = self.client.post(self.register_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email", response.data)
+
+    def test_register_user_missing_fields(self):
+        """Testa o registro faltando campos obrigatórios"""
+        data = {"email": "incomplete@example.com"}
+        response = self.client.post(self.register_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_login_success(self):
+        """Testa o login com credenciais válidas"""
+        data = {
+            "email": "existing@example.com",
+            "password": "existingpass123"
+        }
+        response = self.client.post(self.login_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("access_token", response.data)
+        self.assertIn("refresh_token", response.data)
+
+    def test_login_invalid_credentials(self):
+        """Testa o login com credenciais inválidas"""
+        data = {
+            "email": "existing@example.com",
+            "password": "wrongpassword"
+        }
+        response = self.client.post(self.login_url, data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

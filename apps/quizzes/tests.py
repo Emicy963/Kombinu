@@ -1,4 +1,8 @@
 from django.test import TestCase
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.urls import reverse
+from unittest.mock import patch, MagicMock
 from apps.accounts.models import CustomUser
 from apps.contents.models import Content
 from apps.quizzes.models import Quiz, Question, Option, QuizSubmission, QuizAnswer
@@ -191,3 +195,101 @@ class QuizAnswerModelTest(TestCase):
     def test_answer_belongs_to_submission(self):
         """Testa que a resposta pertence à submissão"""
         self.assertIn(self.answer, self.submission.answers.all())
+
+
+class QuizAPITest(APITestCase):
+    def setUp(self):
+        self.creator = CustomUser.objects.create_user(
+            username="creator@example.com",
+            email="creator@example.com",
+            password="creatorpass123",
+            user_type="creator"
+        )
+        self.learner = CustomUser.objects.create_user(
+            username="learner@example.com",
+            email="learner@example.com",
+            password="learnerpass123",
+            user_type="learner"
+        )
+        self.content = Content.objects.create(
+            title="Content for Quiz",
+            description="Description",
+            creator=self.creator,
+            category="tecnologia"
+        )
+        self.generate_url = reverse("quiz-generate", kwargs={"content_id": self.content.id})
+
+    @patch("apps.quizzes.views.generate_quiz_from_opentdb")
+    def test_generate_quiz_success(self, mock_generate):
+        """Testa gerar quiz com sucesso (mockando serviço externo)"""
+        self.client.force_authenticate(user=self.creator)
+        
+        # Mock return value
+        mock_quiz = MagicMock()
+        mock_quiz.pk = "12345678-1234-5678-1234-567812345678"
+        mock_generate.return_value = mock_quiz
+        
+        data = {
+            "difficulty": "easy",
+            "number_of_questions": 5
+        }
+        response = self.client.post(self.generate_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn("quiz_id", response.data)
+
+    def test_generate_quiz_as_learner(self):
+        """Testa gerar quiz como aprendiz (deve falhar)"""
+        self.client.force_authenticate(user=self.learner)
+        data = {"difficulty": "easy", "number_of_questions": 5}
+        response = self.client.post(self.generate_url, data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_submit_quiz(self):
+        """Testa submeter respostas de um quiz"""
+        # Setup quiz structure
+        quiz = Quiz.objects.create(title="Quiz", content=self.content)
+        question = Question.objects.create(quiz=quiz, question_text="Q1")
+        option1 = Option.objects.create(question=question, text="A", is_correct=True)
+        option2 = Option.objects.create(question=question, text="B", is_correct=False)
+        
+        submit_url = reverse("quiz-submit", kwargs={"quiz_id": quiz.id})
+        self.client.force_authenticate(user=self.learner)
+        
+        data = {
+            "answers": [
+                {
+                    "question_id": str(question.id),
+                    "selected_option_id": str(option1.id)
+                }
+            ]
+        }
+        response = self.client.post(submit_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["score"], 1)
+        self.assertEqual(response.data["total_questions"], 1)
+
+    def test_submit_quiz_invalid_question(self):
+        """Testa submeter resposta para questão que não é do quiz"""
+        quiz = Quiz.objects.create(title="Quiz", content=self.content)
+        other_quiz = Quiz.objects.create(title="Other Quiz", content=None) # Hack content=None for test if allowed or create another content
+        # Actually content is required for quiz, so create another content
+        other_content = Content.objects.create(title="Other", creator=self.creator, category="design")
+        other_quiz.content = other_content
+        other_quiz.save()
+        
+        other_question = Question.objects.create(quiz=other_quiz, question_text="Other Q")
+        other_option = Option.objects.create(question=other_question, text="Opt", is_correct=True)
+        
+        submit_url = reverse("quiz-submit", kwargs={"quiz_id": quiz.id})
+        self.client.force_authenticate(user=self.learner)
+        
+        data = {
+            "answers": [
+                {
+                    "question_id": str(other_question.id),
+                    "selected_option_id": str(other_option.id)
+                }
+            ]
+        }
+        response = self.client.post(submit_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
