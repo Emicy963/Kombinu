@@ -271,11 +271,14 @@ class QuizAPITest(APITestCase):
     def test_submit_quiz_invalid_question(self):
         """Testa submeter resposta para questão que não é do quiz"""
         quiz = Quiz.objects.create(title="Quiz", content=self.content)
-        other_quiz = Quiz.objects.create(title="Other Quiz", content=None) # Hack content=None for test if allowed or create another content
-        # Actually content is required for quiz, so create another content
-        other_content = Content.objects.create(title="Other", creator=self.creator, category="design")
-        other_quiz.content = other_content
-        other_quiz.save()
+        # Create another content for the other quiz (content is required, NOT NULL)
+        other_content = Content.objects.create(
+            title="Other Content",
+            description="Other description",
+            creator=self.creator,
+            category="design"
+        )
+        other_quiz = Quiz.objects.create(title="Other Quiz", content=other_content)
         
         other_question = Question.objects.create(quiz=other_quiz, question_text="Other Q")
         other_option = Option.objects.create(question=other_question, text="Opt", is_correct=True)
