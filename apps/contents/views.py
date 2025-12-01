@@ -7,7 +7,7 @@ from .permissions import IsCreator
 
 
 class ContentViewSet(viewsets.ModelViewSet):
-    queryset = Content.objects.all()
+    queryset = Content.objects.all().order_by('-created_at')
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ["category"]
