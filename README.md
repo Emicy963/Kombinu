@@ -1,6 +1,13 @@
 # Kombinu - Plataforma Educacional
 
-Sistema Django com API REST para gestão de cursos, usuários, quizzes e gamificação educacional.
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](CHANGELOG.md)
+[![Python](https://img.shields.io/badge/python-3.8+-green.svg)](https://www.python.org/downloads/)
+[![Django](https://img.shields.io/badge/django-4.0+-green.svg)](https://www.djangoproject.com/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Sistema Django com API REST para gestão de conteúdos educacionais, quizzes interativos, rankings e gamificação.
+
+> 📝 **Novidades da v2.0**: Confira todas as mudanças no [CHANGELOG.md](CHANGELOG.md)
 
 ## 🌐 Aplicação Online
 
@@ -14,21 +21,31 @@ A aplicação está disponível online em: **[https://kombinu.onrender.com](http
 
 ## Funcionalidades
 
-### Sistema Web
+### 🎯 Sistema de Conteúdos
+- Gestão completa de conteúdos educacionais (texto, vídeo, quiz)
+- Sistema de permissões (criadores podem editar, todos podem visualizar)
+- API REST para CRUD completo
 
-- Sistema de autenticação completo (login, registro, logout)
-- Dashboard protegido para usuários autenticados
-- Interface responsiva e intuitiva
-- Mensagens de feedback para os usuários
+### 📝 Sistema de Quizzes
+- Criação e gestão de questionários interativos
+- Múltiplas opções de resposta por pergunta
+- Submissão e correção automática
+- Cálculo de pontuação e feedback
 
-### API REST
+### 🏆 Sistema de Rankings
+- Rastreamento de pontuações por usuário
+- Rankings globais
+- Gamificação educacional
 
-- **Autenticação por Token**: Sistema seguro de autenticação
-- **Gestão de Usuários**: Registro, login, perfis e preferências
-- **Cursos e Categorias**: Sistema completo de gestão educacional
-- **Progresso de Aprendizagem**: Acompanhamento detalhado do progresso
-- **Inscrições**: Sistema de matrícula em cursos
-- **Documentação Interativa**: Swagger/OpenAPI integrado
+### 👥 Autenticação
+- **JWT Authentication**: Sistema seguro com tokens de acesso e refresh
+- **Tipos de Usuário**: Creator (criador de conteúdo) e Learner (estudante)
+- **Gestão de Perfis**: Registro, login e gerenciamento de perfil
+
+### 📚 Documentação da API
+- **Swagger UI**: Interface interativa para testar endpoints
+- **ReDoc**: Documentação alternativa elegante
+- **OpenAPI 3.0**: Schema completo disponível
 
 ## Requisitos
 
@@ -56,38 +73,78 @@ Antes de iniciar, certifique-se de ter instalado:
    .venv\Scripts\activate     # Windows
    ```
 
-3. **Instale as dependências:**
+3. **Configure as variáveis de ambiente:**
+
+   ```bash
+   # Copie o arquivo de exemplo
+   copy .env.example .env  # Windows
+   # cp .env.example .env  # Linux/macOS
+   
+   # Edite o arquivo .env e configure:
+   # - SECRET_KEY (gere uma nova chave)
+   # - DEBUG=True (para desenvolvimento)
+   # - ALLOWED_HOSTS=localhost,127.0.0.1
+   ```
+
+4. **Instale as dependências:**
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Configure as migrações do banco de dados:**
+5. **Configure as migrações do banco de dados:**
 
    ```bash
    python manage.py makemigrations
    python manage.py migrate
    ```
 
-5. **Crie um superusuário:**
+6. **Crie um superusuário:**
 
    ```bash
    python manage.py createsuperuser
    ```
 
-6. **Inicie o servidor:**
+7. **Inicie o servidor:**
 
    ```bash
    python manage.py runserver
    ```
 
-7. **Acesse o sistema localmente:**
+8. **Acesse o sistema localmente:**
 
-   - **Página inicial**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-   - **Dashboard**: [http://127.0.0.1:8000/dashboard/](http://127.0.0.1:8000/dashboard/)
-   - **Admin**: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
    - **API Docs (Swagger)**: [http://127.0.0.1:8000/api/docs/](http://127.0.0.1:8000/api/docs/)
-   - **API Schema**: [http://127.0.0.1:8000/api/redoc/](http://127.0.0.1:8000/api/redoc/)
+   - **API ReDoc**: [http://127.0.0.1:8000/api/redoc/](http://127.0.0.1:8000/api/redoc/)
+   - **Admin**: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+
+## Testes
+
+O projeto possui uma suíte completa de testes usando pytest.
+
+### Executando os Testes
+
+```bash
+# Executar todos os testes
+pytest
+
+# Executar com verbose
+pytest -v
+
+# Executar testes de um app específico
+pytest apps/accounts/tests.py
+pytest apps/contents/tests.py
+pytest apps/quizzes/tests.py
+
+# Executar com cobertura (requer pytest-cov)
+pytest --cov=apps
+```
+
+### Cobertura de Testes
+
+- **accounts**: 9 testes (autenticação e perfis)
+- **contents**: 11 testes (CRUD e permissões)
+- **quizzes**: 16 testes (criação, submissão e validação)
+- **Total**: 36 testes ✅
 
 ## Estrutura do Projeto
 

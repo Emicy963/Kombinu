@@ -1,10 +1,27 @@
-Django
-djangorestframework
-djangorestframework-simplejwt
-django-filter
-drf_spectacular
-drf-yasg
-psycopg2-binary
-requests
-python-dotenv
-black
+# Core Django
+Django>=4.2,<5.0
+djangorestframework>=3.14,<4.0
+
+# Authentication & Security
+djangorestframework-simplejwt>=5.3,<6.0
+django-cors-headers>=4.3,<5.0
+
+# API Documentation
+drf-spectacular>=0.27,<1.0
+drf-yasg>=1.21,<2.0
+
+# Database
+psycopg2-binary>=2.9,<3.0
+
+# Utilities
+django-filter>=23.0,<24.0
+requests>=2.31,<3.0
+python-dotenv>=1.0,<2.0
+
+# Static Files
+whitenoise>=6.6,<7.0
+
+# Development & Testing
+black>=23.0,<24.0
+pytest>=7.4,<8.0
+pytest-django>=4.7,<5.0
