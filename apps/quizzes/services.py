@@ -67,7 +67,7 @@ def generate_quiz_from_opentdb(content, difficulty=None, num_questions=10):
         data = response.json()
 
         if data["response_code"] != 0:
-            logger.error(f"Erro da API Open Trivia DB: {data["response_code"]}")
+            logger.error(f"Erro da API Open Trivia DB: {data['response_code']}")
             return None
 
         questions_data = data["results"]
