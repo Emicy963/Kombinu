@@ -5,6 +5,22 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.1.0] - 2026-01-11
+
+### Adicionado
+
+#### 📊 Dashboard Statistics API
+
+- Novos endpoints para estatísticas de usuário em `/api/dashboard/`:
+  - `GET /api/dashboard/learner/stats/` - Estatísticas do aprendiz (cursos, pontos, nível, quizzes)
+  - `GET /api/dashboard/learner/courses/` - Cursos em que o aprendiz participou
+  - `GET /api/dashboard/creator/stats/` - Estatísticas do criador (estudantes, cursos)
+- Arquivo `apps/accounts/dashboard_urls.py` criado para organização
+- Views `LearnerStatsView`, `LearnerCoursesView`, `CreatorStatsView` em `accounts/views.py`
+- Agregação de dados baseada em `QuizSubmission` e `Content` models
+
+---
+
 ## [2.0.1] - 2026-01-15
 
 ### Corrigido

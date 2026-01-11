@@ -180,7 +180,7 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     "TITLE": "Kombinu API",
     "DESCRIPTION": "API da plataforma educacional Kombinu",
-    "VERSION": "2.0.0",
+    "VERSION": "2.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
     "AUTHENTICATION_WHITELIST": [
