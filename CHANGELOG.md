@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.0.1] - 2026-01-15
+
+### Corrigido
+
+- Correção do formato de string no logging de erros para Open Trivia DB API.
+
 ## [2.0.0] - 2025-12-02
 
 ### Adicionado
