@@ -162,3 +162,69 @@ class LoginView(APIView):
             return Response(
                 {"error": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED
             )
+
+
+from rest_framework.permissions import IsAuthenticated
+from apps.contents.models import Content
+from apps.quizzes.models import QuizSubmission
+from django.db.models import Sum
+
+class LearnerStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(summary="Get Learner Stats", tags=["Dashboard"])
+    def get(self, request):
+        user = request.user
+        submissions = QuizSubmission.objects.filter(user=user)
+        
+        courses_completed = submissions.values('quiz__content').distinct().count()
+        total_points = submissions.aggregate(Sum('score'))['score__sum'] or 0
+        quizzes_taken = submissions.count()
+        current_level = (total_points // 1000) + 1
+        
+        return Response({
+            "coursesCompleted": courses_completed,
+            "totalPoints": total_points,
+            "currentLevel": current_level,
+            "quizzesTaken": quizzes_taken
+        })
+
+class LearnerCoursesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(summary="Get Enrolled Courses", tags=["Dashboard"])
+    def get(self, request):
+        user = request.user
+        # Get contents where user submitted a quiz
+        content_ids = QuizSubmission.objects.filter(user=user).values_list('quiz__content', flat=True).distinct()
+        contents = Content.objects.filter(id__in=content_ids)
+        
+        data = []
+        for content in contents:
+            data.append({
+                "id": str(content.id),
+                "title": content.title,
+                "progress": 100, # Simplified
+                "lastAccessed": "2024-03-10", # Mock
+                "thumbnail": "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500" # Mock
+            })
+        return Response(data)
+
+class CreatorStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(summary="Get Creator Stats", tags=["Dashboard"])
+    def get(self, request):
+        user = request.user
+        created_contents = Content.objects.filter(creator=user)
+        total_courses = created_contents.count()
+        
+        # totalStudents: unique users who took quizzes on my content
+        total_students = QuizSubmission.objects.filter(quiz__content__creator=user).values('user').distinct().count()
+        
+        return Response({
+            "totalStudents": total_students,
+            "totalCourses": total_courses,
+            "averageRating": 0,
+            "totalRevenue": 0
+        })
