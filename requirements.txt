@@ -12,6 +12,10 @@ drf-yasg>=1.21,<2.0
 
 # Database
 psycopg2-binary>=2.9,<3.0
+dj-database-url>=2.1.0,<3.0
+
+# Deployment
+gunicorn>=21.2.0,<22.0
 
 # Utilities
 django-filter>=23.0,<24.0

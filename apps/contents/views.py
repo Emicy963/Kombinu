@@ -10,7 +10,7 @@ class ContentViewSet(viewsets.ModelViewSet):
     queryset = Content.objects.all().order_by('-created_at')
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["category"]
+    filterset_fields = ["category", "creator"]
     search_fields = ["title", "description"]
 
     def get_serializer_class(self):

@@ -10,6 +10,12 @@ class Content(models.Model):
         ("design", "Design"),
     )
 
+    LEVEL_CHOICES = (
+        ("Iniciante", "Iniciante"),
+        ("Intermediário", "Intermediário"),
+        ("Avançado", "Avançado"),
+    )
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -18,6 +24,15 @@ class Content(models.Model):
     )
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # Campos adicionados para suportar o formulário de criação de conteúdo
+    thumbnail = models.URLField(blank=True, default="")
+    video_url = models.URLField(blank=True, default="")
+    text_content = models.TextField(blank=True, default="")
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default="Iniciante")
+    duration = models.CharField(max_length=20, blank=True, default="")
+    # Tags armazenadas como CSV para simplicidade no MVP
+    tags = models.TextField(blank=True, default="")
 
     def __str__(self):
         return self.title
@@ -31,3 +46,10 @@ class Content(models.Model):
         if self.has_quiz:
             return self.quiz.id
         return None
+
+    @property
+    def tags_list(self):
+        """Retorna as tags como lista Python."""
+        if not self.tags:
+            return []
+        return [t.strip() for t in self.tags.split(",") if t.strip()]
