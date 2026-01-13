@@ -5,6 +5,21 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.2.0] - Otimizações MVP e Preparação para Deploy (Render)
+
+### Adicionado
+
+- Scripts automatizados para deploy `build.sh` no render.
+- Suporte para banco de dados via URL com `dj-database-url` para provisionamento no Neon/Render.
+- Adição da biblioteca `gunicorn` no `requirements.txt` para produção.
+
+### Corrigido
+
+- Ajuste das permissões e configurações de CORS e ALLOWED_HOSTS no `settings.py`.
+- Correção da geração de token no registo.
+
+---
+
 ## [2.1.0] - 2026-01-11
 
 ### Adicionado
