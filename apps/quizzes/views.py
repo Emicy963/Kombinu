@@ -18,7 +18,7 @@ class QuizDetailView(generics.RetrieveAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizDetailSerializer
     permission_classes = [IsAuthenticated]
-    lookup_field = "pk"
+    lookup_field = "id"
 
 
 class QuizGenerationView(APIView):
@@ -63,6 +63,46 @@ class QuizGenerationView(APIView):
                 {"error": "Failed to generate quiz from Open Trivia DB."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+class QuizManualCreationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, content_id):
+        if request.user.user_type != "creator":
+            return Response(
+                {"error": "Only creators can create quizzes."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        content = get_object_or_404(Content, id=content_id)
+
+        # Verifica se já existe um quiz para este conteúdo
+        if hasattr(content, "quiz"):
+            return Response(
+                {"error": "A quiz already exists for this content."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        questions_data = request.data.get("questions", [])
+        if not questions_data:
+            return Response({"error": "No questions provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+        with transaction.atomic():
+            quiz = Quiz.objects.create(title=f"Quiz: {content.title}", content=content)
+            for q_data in questions_data:
+                q_text = q_data.get("question", "")
+                options = q_data.get("options", [])
+                correct_idx = q_data.get("correctAnswer", 0)
+                
+                question = Question.objects.create(quiz=quiz, question_text=q_text)
+                for i, opt_text in enumerate(options):
+                    is_correct = (i == correct_idx)
+                    Option.objects.create(question=question, text=opt_text, is_correct=is_correct)
+            
+        return Response(
+            {"message": "Quiz created successfully", "quiz_id": str(quiz.pk)},
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class QuizSubmissionView(APIView):
@@ -150,8 +190,10 @@ class QuizSubmissionView(APIView):
         return Response(
             {
                 "score": correct_count,
-                "total_questions": total_questions,
-                "correct_answers": correct_count,
+                "totalPoints": total_questions,
+                "correctAnswers": correct_count,
+                "totalQuestions": total_questions,
+                "xp earned": correct_count * 10,
                 "details": details,
             },
             status=status.HTTP_200_OK,

@@ -33,6 +33,7 @@ class Content(models.Model):
     duration = models.CharField(max_length=20, blank=True, default="")
     # Tags armazenadas como CSV para simplicidade no MVP
     tags = models.TextField(blank=True, default="")
+    type = models.CharField(max_length=20, default="text")
 
     def __str__(self):
         return self.title

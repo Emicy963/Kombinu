@@ -3,28 +3,35 @@ from .models import Option, Question, Quiz, QuizSubmission
 
 
 class OptionSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(source="pk", read_only=True)
+
     class Meta:
         model = Option
-        fields = ("pk", "text")
-        read_only_fields = ("pk",)
+        fields = ("id", "text")
 
 
 class QuestionSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(source="pk", read_only=True)
+    text = serializers.CharField(source="question_text", read_only=True)
     options = OptionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Question
-        fields = ("pk", "question_text", "options")
-        read_only_fields = ("pk",)
+        fields = ("id", "text", "options")
 
 
 class QuizDetailSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(source="pk", read_only=True)
+    description = serializers.CharField(source="content.description", read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
+    timeLimit = serializers.SerializerMethodField()
 
     class Meta:
         model = Quiz
-        fields = ("pk", "title", "content", "questions")
-        read_only_fields = ("pk", "title", "content", "questions")
+        fields = ("id", "title", "description", "questions", "timeLimit")
+
+    def get_timeLimit(self, obj):
+        return 15
 
 
 class QuizAnswerSubmissionSerializer(serializers.Serializer):
